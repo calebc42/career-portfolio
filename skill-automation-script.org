@@ -1,0 +1,137 @@
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+  # --- SETUP: Run this command in your WSL2 terminal first ---
+  # 1. cd ~/career-portfolio/
+  # 2. python3 -m venv .venv
+  # 3. source .venv/bin/activate
+  # 4. pip install sentence-transformers scikit-learn
+  
+  import os
+  import re
+  from sentence_transformers import SentenceTransformer
+  from sklearn.metrics.pairwise import cosine_similarity
+  import numpy as np
+
+  # --- 1. DATA PARSING FUNCTIONS ---
+
+  def parse_accomplishments(directory_path):
+      """
+      Parses all .org files in a directory to extract accomplishments.
+      An accomplishment is a dictionary containing its text, skills, and source file.
+      """
+      accomplishments = []
+      # Regex to find the start of an accomplishment block
+      accomplishment_start_regex = re.compile(r'^\*{3}\s+ACCOMPLISHMENT:\s*(.*)')
+      # Regex to find the skills property
+      skills_regex = re.compile(r'^\s*:SKILLS:\s*(.*)', re.IGNORECASE)
+      # Regex to find the STAR properties
+      star_regex = re.compile(r'^\s*:(SITUATION|TASK|ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+
+      for root, _, files in os.walk(directory_path):
+          for file in files:
+              if file.endswith(".org") and not file.startswith(".#"):
+                  file_path = os.path.join(root, file)
+                  with open(file_path, 'r', encoding='utf-8') as f:
+                      content = f.readlines()
+
+                  current_accomplishment = None
+                  for line in content:
+                      # Check for the start of a new accomplishment
+                      match_start = accomplishment_start_regex.match(line)
+                      if match_start:
+                          # If we were in the middle of another accomplishment, save it
+                          if current_accomplishment:
+                              accomplishments.append(current_accomplishment)
+                          # Start a new one
+                          current_accomplishment = {
+                              "title": match_start.group(1).strip(),
+                              "skills": [],
+                              "text": "",
+                              "source": os.path.basename(file_path)
+                          }
+                          continue
+
+                      if current_accomplishment:
+                          # Check for skills
+                          match_skills = skills_regex.match(line)
+                          if match_skills:
+                              skills_text = match_skills.group(1).strip()
+                              if skills_text: # Only add if it's not empty
+                                  current_accomplishment["skills"] = [s.strip() for s in skills_text.split(']],') if s.strip()]
+                              continue
+
+                          # Check for STAR text
+                          match_star = star_regex.match(line)
+                          if match_star:
+                              current_accomplishment["text"] += match_star.group(2).strip() + " "
+                              continue
+                  
+                  # Add the last accomplishment from the file
+                  if current_accomplishment:
+                      accomplishments.append(current_accomplishment)
+
+      return accomplishments
+
+  # --- 2. THE MAIN SCRIPT LOGIC ---
+
+  def suggest_skills_for_untagged(all_accomplishments, model):
+      """
+      Analyzes accomplishments and suggests skills for the untagged ones.
+      """
+      # Separate tagged (reference) from untagged (to-do)
+      tagged = [acc for acc in all_accomplishments if acc["skills"]]
+      untagged = [acc for acc in all_accomplishments if not acc["skills"]]
+
+      if not tagged:
+          print("Error: No tagged accomplishments found to use as a reference.")
+          return
+      if not untagged:
+          print("Success: All accomplishments appear to be tagged already!")
+          return
+
+      print(f"Found {len(tagged)} tagged accomplishments to use as a reference.")
+      print(f"Found {len(untagged)} untagged accomplishments to process.\n")
+      print("--- Generating Suggestions ---\n")
+
+      # Create semantic fingerprints (embeddings) for the reference library
+      tagged_texts = [acc["text"] for acc in tagged]
+      tagged_embeddings = model.encode(tagged_texts, show_progress_bar=False)
+
+      # Process each untagged accomplishment
+      for i, untagged_acc in enumerate(untagged):
+          untagged_embedding = model.encode([untagged_acc["text"]], show_progress_bar=False)
+
+          # Calculate similarity against the entire reference library
+          similarities = cosine_similarity(untagged_embedding, tagged_embeddings)
+          
+          # Find the best match
+          best_match_index = np.argmax(similarities)
+          best_match_score = similarities[0][best_match_index]
+          most_similar_acc = tagged[best_match_index]
+
+          # --- Generate the suggestion ---
+          print(f"({i+1}/{len(untagged)}) For Untagged Accomplishment: '{untagged_acc['title']}'")
+          print(f"    (Source: {untagged_acc['source']})")
+          print(f"    Most similar tagged accomplishment is: '{most_similar_acc['title']}' (Score: {best_match_score:.2f})")
+          print(f"    SUGGESTED SKILLS: {', '.join(most_similar_acc['skills'])}]]")
+          print("-" * 50)
+
+
+  # --- 3. EXECUTION ---
+
+  # IMPORTANT: Replace this path with the path to your employment folder in WSL2
+  my_employment_path = '~/career-portfolio/employment'
+  absolute_employment_path = os.path.expanduser(my_employment_path)
+
+  # Load the pre-trained AI model. This will be fast on your RTX 5070Ti.
+  print("Loading AI model...")
+  # This model is a great balance of speed and accuracy.
+  model = SentenceTransformer('all-MiniLM-L6-v2') 
+  print("Model loaded.\n")
+
+  # Parse all accomplishment data from your .org files
+  all_accomplishments = parse_accomplishments(absolute_employment_path)
+
+  # Run the suggestion engine
+  suggest_skills_for_untagged(all_accomplishments, model)
+
+#+end_src
