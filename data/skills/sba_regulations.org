@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       29fd67d5-1ff3-46c7-bd52-9d33a9904701
+:END:
+#+title: SBA Regulations
+#+filetags: :SKILL:
+* SBA Regulations
+:PROPERTIES:
+:SKILL_NAME: SBA Regulations
+:CATEGORY: Finance & Lending
+:PROFICIENCY: Intermediate
+:ATS_KEYWORDS: SBA SOP 50 10, SBA 7(a), SBA Express Loans, Etran, CAIVRS Resolution, PPP Loan Forgiveness, FFCRA Tax Code.
+:END:
+
+

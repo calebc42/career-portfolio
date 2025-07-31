@@ -1,0 +1,87 @@
+:PROPERTIES:
+:ID:       38569d67-b970-4163-bf1e-835a2882f4e1
+:END:
+#+title: Sales Representative
+#+filetags: :JOB:
+* Sales Representative
+:PROPERTIES:
+:COMPANY: Sprint
+:POSITION: Sales Representative
+:START_DATE: 2017-09-01
+:END_DATE: 2019-05-31
+:SUMMARY: This role marked the beginning of a career in sales, where I quickly became a top performer by using a consultative framework to exceed customer needs. Responsibilities included maintaining deep product knowledge, setting and achieving ambitious sales goals, and coordinating in-store events to drive traffic. Consistent high performance and a commitment to professional development led to a promotion to Sr. Sales Representative.
+:END:
+
+** Accomplishments
+*** ACCOMPLISHMENT: Consultative Sales Execution
+:PROPERTIES:
+:ID:       a42ccf9d-cd40-40b2-9502-c8b289e56e4e
+:ROAM_ALIASES: Sales Representative: Consultative Sales Execution
+:SKILLS: 
+:SITUATION: In a competitive telecom market, a consultative approach was necessary to differentiate from competitors and truly meet customer needs.
+:TASK: To use the "Live, Work, Play" framework to ask strategic questions, uncover customer needs, and present tailored proposals.
+:ACTION: Conducted consultative sales conversations by asking strategic questions to understand each customer's unique lifestyle and work requirements, then presented tailored proposals and pricing quotes that directly addressed those needs.
+:RESULT:  Built stronger customer relationships and increased sales effectiveness by providing personalized solutions rather than generic product pitches.
+:END:
+*** ACCOMPLISHMENT: Upselling and Cross-selling
+:PROPERTIES:
+:ID:       fe84e4ba-4209-4ced-bc22-dc3fc9ce0a63
+:ROAM_ALIASES: Sales Representative: Upselling and Cross-selling
+:SKILLS:
+:SITUATION: Upselling and Cross-selling
+:TASK: To maintain extensive knowledge of all products and services to effectively identify and act on upsell and cross-sell opportunities.
+:ACTION: Maintained comprehensive knowledge of all plans, devices, and accessories, enabling the effective upselling and cross-selling of additional products and services during sales consultations.
+:RESULT: Increased average transaction value and overall revenue by successfully adding relevant products and services to customer accounts.
+:END:
+*** ACCOMPLISHMENT: Personal Goal Setting and Quota Attainment
+:PROPERTIES:
+:ID:       f31efc6b-3919-4559-9fe6-e54b4836083d
+:ROAM_ALIASES: Sales Representative: Personal Goal Setting and Quota Attainment
+:SKILLS: 
+:SITUATION: Consistent performance in a sales role requires proactive planning and a strategic approach to meeting monthly targets.
+:TASK: To set daily and weekly personal sales goals to strategically plan for and consistently meet or exceed monthly sales quotas.
+:ACTION:  Set and tracked daily and weekly personal sales goals, creating a clear roadmap to strategically meet and surpass monthly quotas.
+:RESULT: Achieved an average composite sales goal of 125% through consistent performance, placing in the top 10% of sales representatives in the district.
+:END:
+*** ACCOMPLISHMENT: Lead Generation and Event Coordination
+:PROPERTIES:
+:ID:       7a842c31-5c3a-4666-8051-93f03e6bdfc9
+:ROAM_ALIASES: Sales Representative: Lead Generation and Event Coordination
+:SKILLS: 
+:SITUATION: Proactive lead generation was required to supplement regular foot traffic and create additional sales opportunities.
+:TASK: To coordinate in-store events to generate leads and drive sales.
+:ACTION: Coordinated in-store events by generating new leads, conducting follow-up calls, and setting appointments to drive targeted traffic into the store.
+:RESULT:  Created new sales opportunities and increased store traffic through proactive event coordination and lead generation efforts.
+:END:
+*** ACCOMPLISHMENT: Operational Adherence
+:PROPERTIES:
+:ID:       0f97e49e-773d-4890-8e6f-d15cc9d133d3
+:ROAM_ALIASES: Sales Representative: Operational Adherence
+:SKILLS: 
+:SITUATION: Handling transactions and customer information requires strict adherence to operational procedures to protect the company from loss and fraud.
+:TASK: To adhere to all operational procedures for loss prevention and fraud prevention during every customer transaction.
+:ACTION: Meticulously followed all company policies and procedures related to transaction processing, inventory control, and customer data security.
+:RESULT: Protected company assets and customer information by ensuring 100% compliance with all loss and fraud prevention protocols.
+:END:
+*** ACCOMPLISHMENT: Commitment to Professional Development
+:PROPERTIES:
+:ID:       66996061-37f3-4efa-8569-34bc77ffbb31
+:ROAM_ALIASES: Sales Representative: Commitment to Professional Development
+:SKILLS: 
+:SITUATION: To maintain a position as a top performer, continuous learning and skill development were essential.
+:TASK: To actively seek out opportunities to improve sales skills and product knowledge.
+:ACTION: Actively sought out continuous training and participated in additional role-playing opportunities to refine and improve sales and negotiation skills.
+:RESULT: Enhanced sales effectiveness and product expertise, contributing to sustained high performance and eventual promotion.
+:END:
+*** ACCOMPLISHMENT: Performance-Based Promotion
+:PROPERTIES:
+:ID:       ac4c5c9f-ac79-44ba-afe2-a65013f10761
+:ROAM_ALIASES: Sales Representative: Performance-Based Promotion
+:SKILLS: 
+:SITUATION: After consistently exceeding sales targets and demonstrating leadership qualities, an opportunity for advancement became available.
+:TASK: To meet the performance and leadership criteria for a promotion to a senior role.
+:ACTION: Consistently exceeded sales targets and actively demonstrated leadership potential within the team.
+:RESULT: Earned a promotion to Sr. Sales Representative in formal recognition of outstanding sales performance and leadership capabilities.
+:END:
+
+

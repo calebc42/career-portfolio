@@ -1,0 +1,18 @@
+#+title: My Professional Basics
+#+filetags: :CONTACT_INFO:
+
+Personal Information
+:PROPERTIES:
+:NAME_FIRST:       Caleb
+:NAME_LAST:        Christensen
+:LABEL:            Revenue Operations
+:EMAIL:            calebch42@gmail.com
+:PHONE:            (555) 123-4567
+:URL:              N/A
+:POSTAL_CODE:      UT 84084
+:CITY:             West Jordan
+:COUNTRY_CODE:     US
+:REGION:           Utah
+:PROFILE_LINKEDIN: https://www.linkedin.com/in/calebch
+:PROFILE_GITHUB:   https://github.com/calebch42
+:END:

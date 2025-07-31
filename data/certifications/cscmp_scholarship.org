@@ -1,0 +1,20 @@
+:PROPERTIES:
+:ID:       f5390858-576e-4594-95f7-254b44b0b824
+:END:
+#+title: CSCMP Scholarship
+#+filetags: :PROJECT:
+* CSCMP Scholarship
+:PROPERTIES:
+:PROJECT_NAME: CSCMP Scholarship
+:AWARDING_BODY: Council of Supply-Chain Management Professionals (CSCMP)
+:DATE: 2018
+:AWARD: Scholarship
+:SKILLS: 
+:END:
+
+** Summary
+This presentation outlined the decision to pursue a degree in Supply-Chain Management as a means to address ethical and transparency failures in global commerce.
+The Problem: I analyzed the systemic issues in global supply chains, such as the lack of transparency that enabled tragedies like the Rana Plaza collapse.
+The Proposed Solution: I argued that blockchain technology could serve as the foundational infrastructure for a new, transparent supply chain. By using an immutable and distributed ledger, companies could provide verifiable proof of provenance, ensure ethical labor practices, and create true end-to-end visibility for both consumers and investors.
+
+** Relevance

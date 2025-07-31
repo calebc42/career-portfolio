@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       427cbc42-6487-43f3-b7c5-5b928c03a717
+:END:
+#+title: Go-to-Market (GTM) Strategy
+#+filetags: :SKILL:
+* Go-to-Market (GTM) Strategy
+:PROPERTIES:
+:SKILL_NAME: Go-to-Market (GTM) Strategy
+:CATEGORY: Sales & Sales Operations
+:PROFICIENCY: Proficient
+:ATS_KEYWORDS: GTM Execution, Product Launch, Market Entry, Sales Motion, Value Proposition Design, Product-Market Fit Analysis, New Product Adoption, Sales Strategy, Revenue Strategy, GTM Planning.
+:END:
+
+

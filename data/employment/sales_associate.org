@@ -1,0 +1,17 @@
+:PROPERTIES:
+:ID:       9c6f78bd-c1ec-40f2-ab26-a087c277884a
+:END:
+#+title: Sales Associate
+#+filetags: :JOB:
+* Sales Associate
+:PROPERTIES:
+:COMPANY: Zumiez
+:POSITION: Sales Associate
+:START_DATE: 2016-11-01
+:END_DATE: 2017-09-30
+:SUMMARY: In this role, I developed foundational sales skills within a competitive retail environment. The focus was on building genuine customer relationships to drive loyalty and sales, successfully enrolling customers in the store's rewards program. I also learned to track sales trends to effectively merchandise products for maximum exposure and sales impact.
+:END:
+
+** Accomplishments
+
+

@@ -1,0 +1,15 @@
+:PROPERTIES:
+:ID:       e2726dfd-e1ee-42ab-93bc-b1eabc417e61
+:END:
+#+title: Highschool
+#+filetags: :EDUCATION:
+* Highschool
+:PROPERTIES:
+:INSTITUTION: Highschool
+:AREA: Primary Education
+:STUDY_TYPE: Diploma
+:START_DATE: N/A
+:END_DATE: 2017-05-31
+:END:
+
+

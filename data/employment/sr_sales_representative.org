@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID:       80f92474-05b7-49f5-a285-d195ccad2f53
+:END:
+#+title: Sr. Sales Representative
+#+filetags: :JOB:
+* Sr. Sales Representative
+:PROPERTIES:
+:COMPANY: Sprint
+:POSITION: Sr. Sales Representative
+:START_DATE: 2019-05-01
+:END_DATE: 2020-08-31
+:SUMMARY: As a Sr. Sales Representative and keyholder, my responsibilities expanded to include manager-on-duty tasks, such as daily store operations, cash handling, and inventory control. I took the initiative to architect and implement coaching and sales process systems to drive team performance. A key strategic achievement was leveraging our store's unique status as a district repair hub to design a novel "account audit" process, transforming non-revenue service visits into the district's top-performing B2B sales pipeline.
+:END:
+
+** Accomplishments
+*** ACCOMPLISHMENT: Store Operations Management
+:PROPERTIES:
+:ID:       d0c31925-3615-4137-b831-b8ac5509e3e8
+:ROAM_ALIASES: Sr. Sales Representative: Store Operations Management
+:SKILLS:
+:SITUATION: In the absence of senior management, a designated leader was needed to ensure the store continued to operate smoothly and securely.
+:TASK: To manage all daily store operations, including customer queue management, opening/closing procedures, cash handling, and nightly inventory counts.
+:ACTION: Acted as the manager-on-duty, managing the customer queue, executing opening and closing procedures, handling all cash operations, and conducting nightly inventory stock counts as a designated keyholder.
+:RESULT: Entrusted with keyholder responsibilities, ensuring the store was managed efficiently and securely during all shifts.
+:END:
+*** ACCOMPLISHMENT: Sales Coaching and Huddle System Implementation
+:PROPERTIES:
+:ID:       03198ced-78dc-4366-ac11-7c209c2f14f3
+:ROAM_ALIASES: Sr. Sales Representative: Sales Coaching and Huddle System Implementation
+:SKILLS:
+:SITUATION: The sales team required daily structure and motivation to maintain focus and performance throughout the day.
+:TASK: To develop and lead a daily huddle system to set goals and motivate the team.
+:ACTION: Developed and led daily sales huddles, coaching team members on setting individual goals based on foot-traffic volume and seasonality. Created and ran friendly sales competitions to drive motivation.
+:RESULT: Increased team sales consistency and motivation through data-informed goal setting and the implementation of engaging sales competitions. 
+:END:
+*** ACCOMPLISHMENT: Architecting a B2B Revenue Stream from a Service Function
+:PROPERTIES:
+:ID:       3351183c-a2b1-470b-967a-09ca40c120dd
+:ROAM_ALIASES: Sr. Sales Representative: Architecting a B2B Revenue Stream from a Service Function
+:SKILLS:
+:SITUATION: The store's status as a district repair hub created a high volume of non-revenue service traffic, which represented an untapped opportunity.
+:TASK: To create a process to convert service interactions into a consistent sales pipeline for both B2B and consumer accounts.
+:ACTION: Designed and implemented a repeatable "account audit" process. While customers waited for repairs, collaborated with technicians to review their accounts, identify upsell opportunities, and uncover qualified B2B leads based on business ownership structures.
+:RESULT: Led the store to become the #1 generator of business revenue in the district by successfully converting non-revenue service visits into a new, consistent B2B and consumer sales pipeline.
+:END:
+*** ACCOMPLISHMENT: Real-Time Coaching Process
+:PROPERTIES:
+:ID:       3ab3ffa4-97f6-41d4-94ea-7f36188b39e2
+:ROAM_ALIASES: Sr. Sales Representative: Real-Time Coaching Process
+:SKILLS:
+:SITUATION: To improve the quality of sales interactions and prevent lost opportunities, a real-time coaching mechanism was needed.
+:TASK: To implement a system for providing real-time coaching to sales reps before they engaged with customers.
+:ACTION: Implemented a pre-transaction "huddle" system at the inventory safe checkpoint. This served as a just-in-time coaching opportunity to review deal specifics, reinforce process, and strategize on objection handling.
+:RESULT:  Improved the quality and consistency of sales execution by providing targeted, real-time coaching, leading to better objection handling and process adherence.
+:END:
+*** ACCOMPLISHMENT: Sustained High Performance
+:PROPERTIES:
+:ID:       a6fbc41e-f08a-465f-98a3-1ae9ddde45b9
+:ROAM_ALIASES: Sr. Sales Representative: Sustained High Performance
+:SKILLS:
+:SITUATION: After being promoted to a senior role with additional leadership responsibilities, it was critical to maintain a high level of personal sales performance.
+:TASK: To continue to meet and exceed personal sales targets while performing leadership duties.
+:ACTION: Continued to apply effective sales strategies and work ethic to personal sales goals.
+:RESULT: Consistently maintained an average composite sales goal of 125% for most of my tenure, remaining in the top 10% of the district even after promotion.
+:END:
+
+

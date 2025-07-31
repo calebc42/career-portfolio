@@ -1,0 +1,62 @@
+:PROPERTIES:
+:ID:       7db8a88e-9693-4dcb-be0c-3fbab7997b44
+:END:
+#+title: Operations Intern
+#+filetags: :JOB:
+* Operations Intern
+:PROPERTIES:
+:COMPANY: Dynatronics
+:POSITION: Operations Intern
+:START_DATE: 2018-05-01
+:END_DATE: 2018-08-31
+:SUMMARY: During a summer internship at Dynatronics, a medical device manufacturer, I was tasked with solving a critical supply chain issue causing production delays. This role involved designing and implementing a new inventory system, performing root cause analysis for international compliance, managing vendor relations, and leading a cross-functional team for the year-end physical inventory count. The experience culminated in a formal Letter of Recommendation from the VP of Operations.
+:END:
+
+** Accomplishments
+*** ACCOMPLISHMENT: Kanban System Design and Implementation
+:PROPERTIES:
+:ID:       91c842b3-97e1-46ea-8342-70436b8bb57a
+:ROAM_ALIASES: Operations Intern: Kanban System Design and Implementation
+:SITUATION: The company was experiencing frequent stock-outs of critical components, leading to production delays and a high number of past-due customer orders.
+:TASK: To design and implement a new inventory replenishment process to solve the stock-out issues, with a key challenge of ensuring adoption by a long-tenured warehouse staff.
+:ACTION: Designed a physical, card-based Kanban system to provide a simple, visual cue for replenishment, deliberately prioritizing user-friendliness to ensure adoption. Established a 5-step workflow defining the process from an item reaching its safety stock level to its final replenishment.
+:RESULT:  The implemented Kanban system resulted in a 57.28% decrease in stock-outs and a 70.38% decrease in past-due orders, earning a formal Letter of Recommendation from the VP of Operations.
+:END:
+*** ACCOMPLISHMENT: International Process Improvement (CAPA)
+:PROPERTIES:
+:ID:       b1f24621-68bd-4910-9c46-94805432ffe8
+:ROAM_ALIASES: Operations Intern: International Process Improvement (CAPA)
+:SITUATION: The company needed to ensure its manufacturing processes complied with differing medical device guidelines in international markets like Japan and Canada.
+:TASK: To identify and resolve conflicts with international medical device manufacturing guidelines.
+:ACTION: Performed 5-Why root cause analysis to identify the underlying causes of compliance issues and developed formal Corrective Action Preventative Action (CAPA) plans to resolve them.
+:RESULT: Created actionable plans to align manufacturing processes with international standards, mitigating compliance risks and supporting global market access.
+:END:
+*** ACCOMPLISHMENT: Vendor Relationship Management
+:PROPERTIES:
+:ID:       e035de4b-7c5e-4874-adaf-0141c4b475d1
+:ROAM_ALIASES: Operations Intern: Vendor Relationship Management
+:SITUATION: The supply chain's efficiency depended on clear and consistent communication with external vendors.
+:TASK: To manage key vendor relations tasks, including placing orders, confirming timelines, and handling returns.
+:ACTION: Managed vendor relations by placing purchase orders, confirming lead times and due dates, obtaining Requests for Quotations (RFQs), and issuing Return Merchandise Authorizations (RMAs).
+:RESULT: Ensured a smooth procurement process and maintained positive vendor relationships, contributing to a more reliable supply chain.
+:END:
+*** ACCOMPLISHMENT: Cross-Functional Systems Collaboration
+:PROPERTIES:
+:ID:       9e3b26a5-a7ca-4592-9da8-2776f2f8ce76
+:ROAM_ALIASES: Operations Intern: Cross-Functional Systems Collaboration
+:SITUATION: The company was seeking to improve its overall inventory control beyond the Kanban project, requiring collaboration across multiple departments.
+:TASK: To contribute to the design and implementation of new inventory control systems, such as ABC cycle counting.
+:ACTION: Collaborated with senior leadership across the Operations, Supply Chain, and Accounting departments to help design and implement a new ABC cycle counting system.
+:RESULT: Contributed to the design of an ABC cycle counting system that successfully reduced the time spent on future year-end physical inventory counts.
+:END:
+*** ACCOMPLISHMENT: Cross-Functional Project Leadership
+:PROPERTIES:
+:ID:       4f699ef0-494b-4068-94db-374a33985aad
+:ROAM_ALIASES: Operations Intern: Cross-Functional Project Leadership
+:SITUATION: The company was preparing for its year-end financial audit, which required a complete and accurate physical inventory count.
+:TASK: To lead a team to conduct the physical inventory count and compile the results for the Accounting department and external auditors.
+:ACTION: Led and organized a team of 12 employees to execute the count efficiently, delegating tasks, ensuring accurate procedures, and consolidating all data for the Accounting department.
+:RESULT: Successfully completed the year-end physical inventory, providing accurate data for the company's external financial audit and contributing to earning a formal Letter of Recommendation.
+:END:
+
+

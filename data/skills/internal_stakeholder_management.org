@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       fb94c057-15b8-4532-acfb-3330ebc03cd5
+:END:
+#+title: Internal Stakeholder Management
+#+filetags: :SKILL:
+* Internal Stakeholder Management
+:PROPERTIES:
+:SKILL_NAME: Internal Stakeholder Management
+:CATEGORY: Leadership & Management
+:PROFICIENCY: Master
+:ATS_KEYWORDS: Internal Collaboration, Departmental Liaison, Executive Communication, Reporting to Leadership, Managing Up, Cross-Functional Teams.
+:END:
+
+

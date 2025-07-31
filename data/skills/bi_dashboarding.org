@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       11421750-74d3-4294-b308-509b44e2caea
+:END:
+#+title: BI & Dashboarding
+#+filetags: :SKILL:
+* BI & Dashboarding
+:PROPERTIES:
+:SKILL_NAME: BI & Dashboarding
+:CATEGORY: Data Analysis & Business Intelligence
+:PROFICIENCY: Intermediate
+:ATS_KEYWORDS: Dashboard Creation, KPI Reporting, Performance Dashboards, Business Intelligence, Data Visualization, DOMO, Tableau, Power BI.
+:END:
+
+
