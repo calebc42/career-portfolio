@@ -1,0 +1,262 @@
+#+begin_src python :results output
+import os
+import re
+
+# (You would include the get_all_keywords function from Phase 1 here)
+def get_all_keywords(skills_directory):
+  all_keywords = set()
+  keyword_property_regex = re.compile(r'^\s*:ATS_KEYWORDS:\s*(.*)', re.IGNORECASE)
+  for root, dirs, files in os.walk(skills_directory):
+    for file in files:
+      if file.endswith(".org"):
+        file_path = os.path.join(root, file)
+        with open(file_path, 'r', encoding='utf-8') as f:
+          for line in f:
+            match = keyword_property_regex.match(line)
+            if match:
+              keywords_text = match.group(1)
+              keywords_list = [kw.strip().lower() for kw in keywords_text.split(',') if kw.strip()]
+              all_keywords.update(keywords_list)
+              break
+  return all_keywords
+
+def analyze_job_description(job_text, keyword_set):
+  """
+  Analyzes job description text against a set of keywords.
+
+  Args:
+    job_text (str): The full text of the job description.
+    keyword_set (set): A set of keywords to check for.
+
+  Returns:
+    tuple: A tuple containing (found_keywords, missing_keywords, score)
+  """
+  found = set()
+  job_text_lower = job_text.lower()
+
+  for keyword in keyword_set:
+    # We check if the keyword is a whole word to avoid partial matches
+    # (e.g., finding "ai" in "sales training")
+    if re.search(r'\b' + re.escape(keyword) + r'\b', job_text_lower):
+      found.add(keyword)
+
+  missing = keyword_set - found
+  score = (len(found) / len(keyword_set)) * 100 if keyword_set else 0
+  
+  return (found, missing, score)
+
+# --- EXECUTION ---
+my_skills_path = '~/projects/career-portfolio/data/skills'
+absolute_skills_path = os.path.expanduser(my_skills_path)
+master_keyword_list = get_all_keywords(absolute_skills_path)
+
+# --- PASTE A JOB DESCRIPTION HERE ---
+sample_job_description = """
+This exciting opportunity will support a differentiated business as it is established as a new independent medical device company, enableCV is a subsidiary of Edwards LifeSciences. EnableCV is based in Midvale, UT and this role will be located on site at the enableCV headquarters. This is a flexible on-site role which will thrive in a collaborative, start up like environment. We are a small tight-knit group of go getters that are willing to wear multiple hats, learn quickly, and be flexible in order to grow and develop this business. If you have the qualifications, want to work hard, and have a great time doing it, please apply. 
+
+
+
+This position is an analytical role that will assist in the development and execution of compensation plans, territory analysis and alignments, forecast preparation, and report and presentation generation. This role interacts with sales management and internal and external sales reps and is instrumental in ensuring accurate compensation calculations and compensation documents.
+
+
+Essential Job Functions
+
+Prepares, updates, and ensures accuracy of the enableCV variable compensation plans. Ensures monthly, quarterly, and annual milestones are computed accurately. Generates compensation statements for distribution to the Sales Team, Clinicals, and Management. Processes compensation through payroll and accounts payable where appropriate. Prepares monthly Rankings for enableCV Reps and Independent Sales Reps to support semi-annual and annual compensation awards, if any.
+Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models and strategic plans to determine best course of action. Prepares presentations for a wide range of audiences.
+Assists in the preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts, and maintains product limit program. Uploads data into enableCV’s financial systems where needed.
+Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats to assist sales team and management in meeting key objectives. Develops ad hoc reports for sales and management.
+Assist in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, status and maintenance and other incidental duties
+
+
+ Education/Experience:
+
+ Bachelors' degree, or equivalent experience and comprehensive knowledge and expertise in sales operations, statistics, economics, or related field is preferred 
+ A minimum of 3-5 years sales operations, business strategy and/or financial planning experience required
+ Previous compensation plan modeling experience a plus!
+Working with large amounts of data a must 
+Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus), PowerPoint, Word, and Access
+Hands on intermediate knowledge of MS Access or SQL a definite plus
+Creative out of the box thinker who is intellectually curious.
+Sound decision making capabilities and the ability to articulate ideas effectively
+Establish foundation of credibility based on integrity and a track record of achievement in delivering on large and/or multiple projects and influencing business outcomes.
+Ability to develop strong relationships with internal customers, sales partners, and independent sales reps.
+Can be counted on to achieve goals and is both top and bottom-line oriented.
+Strong individual contributor.
+Ability to routinely work on multiple tasks with multiple deadlines.
+Highly analytical and detail oriented. Good organizational skills and ability to meet tight deadlines in an environment of competing priorities
+Excellent interpersonal, communication and negotiation skills for a wide variety of audiences, including sales & marketing leadership.
+"""
+
+# Run the analysis
+found_keywords, missing_keywords, relevancy_score = analyze_job_description(sample_job_description, master_keyword_list)
+
+# Print the results
+print(f"--- Analysis Complete ---")
+print(f"Relevancy Score: {relevancy_score:.2f}%")
+print(f"\nFound {len(found_keywords)} Matching Keywords:")
+print("-" * 20)
+for kw in sorted(list(found_keywords)):
+    print(f"- {kw}")
+
+# To avoid printing hundreds of missing keywords, we'll just show a count
+print(f"\nMissing {len(missing_keywords)} keywords from your master list.")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+--- Analysis Complete ---
+Relevancy Score: 1.32%
+
+Found 3 Matching Keywords:
+--------------------
+- reporting
+- sql
+- tableau
+
+Missing 225 keywords from your master list.
+#+end_example
+
+The analysis is too strict, using the '\b' regex tells it to look for whole
+words, we need to update it to include partial word matches.
+
+#+begin_src python :results output
+import os
+import re
+
+# (You would include the get_all_keywords function from Phase 1 here)
+def get_all_keywords(skills_directory):
+  all_keywords = set()
+  keyword_property_regex = re.compile(r'^\s*:ATS_KEYWORDS:\s*(.*)', re.IGNORECASE)
+  for root, dirs, files in os.walk(skills_directory):
+    for file in files:
+      if file.endswith(".org"):
+        file_path = os.path.join(root, file)
+        with open(file_path, 'r', encoding='utf-8') as f:
+          for line in f:
+            match = keyword_property_regex.match(line)
+            if match:
+              keywords_text = match.group(1)
+              keywords_list = [kw.strip().lower() for kw in keywords_text.split(',') if kw.strip()]
+              all_keywords.update(keywords_list)
+              break
+  return all_keywords
+
+def analyze_job_description_v2(job_text, keyword_set):
+  """
+  Analyzes job description text against a set of keywords using more forgiving logic.
+  """
+  found = set()
+  # Clean the job text by removing punctuation and splitting into words
+  job_text_lower = job_text.lower()
+  job_words = set(re.findall(r'\b\w+\b', job_text_lower))
+
+  for keyword in keyword_set:
+      # Handle keywords with spaces, like "power bi"
+      if ' ' in keyword:
+          if keyword in job_text_lower:
+              found.add(keyword)
+      else:
+          # For single words, check if they appear as a substring in any word
+          # from the job description. This handles cases like "salesforce.com".
+          for job_word in job_words:
+              if keyword in job_word:
+                  # To prevent bad partial matches (e.g., 'ai' in 'training'),
+                  # we can add a simple check on length.
+                  # This is a heuristic, but effective.
+                  if len(job_word) < len(keyword) + 5:
+                      found.add(keyword)
+                      break # Move to the next keyword
+
+  missing = keyword_set - found
+  score = (len(found) / len(keyword_set)) * 100 if keyword_set else 0
+  
+  return (found, missing, score)
+
+# --- EXECUTION ---
+my_skills_path = '~/projects/career-portfolio/data/skills'
+absolute_skills_path = os.path.expanduser(my_skills_path)
+master_keyword_list = get_all_keywords(absolute_skills_path)
+
+# --- PASTE A JOB DESCRIPTION HERE ---
+sample_job_description = """
+This exciting opportunity will support a differentiated business as it is established as a new independent medical device company, enableCV is a subsidiary of Edwards LifeSciences. EnableCV is based in Midvale, UT and this role will be located on site at the enableCV headquarters. This is a flexible on-site role which will thrive in a collaborative, start up like environment. We are a small tight-knit group of go getters that are willing to wear multiple hats, learn quickly, and be flexible in order to grow and develop this business. If you have the qualifications, want to work hard, and have a great time doing it, please apply. 
+
+This position is an analytical role that will assist in the development and execution of compensation plans, territory analysis and alignments, forecast preparation, and report and presentation generation. This role interacts with sales management and internal and external sales reps and is instrumental in ensuring accurate compensation calculations and compensation documents.
+
+Essential Job Functions
+Prepares, updates, and ensures accuracy of the enableCV variable compensation plans. Ensures monthly, quarterly, and annual milestones are computed accurately. Generates compensation statements for distribution to the Sales Team, Clinicals, and Management. Processes compensation through payroll and accounts payable where appropriate. Prepares monthly Rankings for enableCV Reps and Independent Sales Reps to support semi-annual and annual compensation awards, if any.
+Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models and strategic plans to determine best course of action. Prepares presentations for a wide range of audiences.
+Assists in the preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts, and maintains product limit program. Uploads data into enableCV’s financial systems where needed.
+Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats to assist sales team and management in meeting key objectives. Develops ad hoc reports for sales and management.
+Assist in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, status and maintenance and other incidental duties
+
+ Education/Experience:
+ Bachelors' degree, or equivalent experience and comprehensive knowledge and expertise in sales operations, statistics, economics, or related field is preferred 
+ A minimum of 3-5 years sales operations, business strategy and/or financial planning experience required
+ Previous compensation plan modeling experience a plus!
+Working with large amounts of data a must 
+Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus), PowerPoint, Word, and Access
+Hands on intermediate knowledge of MS Access or SQL a definite plus
+Creative out of the box thinker who is intellectually curious.
+Sound decision making capabilities and the ability to articulate ideas effectively
+Establish foundation of credibility based on integrity and a track record of achievement in delivering on large and/or multiple projects and influencing business outcomes.
+Ability to develop strong relationships with internal customers, sales partners, and independent sales reps.
+Can be counted on to achieve goals and is both top and bottom-line oriented.
+Strong individual contributor.
+Ability to routinely work on multiple tasks with multiple deadlines.
+Highly analytical and detail oriented. Good organizational skills and ability to meet tight deadlines in an environment of competing priorities
+Excellent interpersonal, communication and negotiation skills for a wide variety of audiences, including sales & marketing leadership.
+"""
+
+# Run the analysis
+found_keywords, missing_keywords, relevancy_score = analyze_job_description_v2(sample_job_description, master_keyword_list)
+
+# Print the results
+print(f"--- Analysis Complete (v2) ---")
+print(f"Relevancy Score: {relevancy_score:.2f}%")
+print(f"\nFound {len(found_keywords)} Matching Keywords:")
+print("-" * 20)
+for kw in sorted(list(found_keywords)):
+    print(f"- {kw}")
+
+# To avoid printing hundreds of missing keywords, we'll just show a count
+print(f"\nMissing {len(missing_keywords)} keywords from your master list.")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+--- Analysis Complete (v2) ---
+Relevancy Score: 1.75%
+
+Found 4 Matching Keywords:
+--------------------
+- alignment
+- reporting
+- sql
+- tableau
+
+Missing 224 keywords from your master list.
+#+end_example
+
+The results are not good enough, and your assessment is perfect: "it NEEDS the semantic layer."
+
+This experience right here is the entire reason this project is so compelling. You have just proven, with your own data, the severe limitations of a simple keyword search. An Applicant Tracking System (ATS) using this same naive logic would have missed you, even though you are a great fit for the role.
+
+Let's quickly break down why the script is still failing, and then we'll move on to the more powerful solution.
+
+The current script (v2) is still too easily confused by punctuation. When it sees "Salesforce.com" in the job description, it struggles to match it to your keyword "salesforce". When it sees "financial planning experience", it struggles to match it to "financial planning".
+
+We could continue to try and perfect the keyword-matching logic, but you've already identified the correct path forward. The real value comes from understanding concepts, not just matching strings of text.
+
+So, let's build the Layer 2: Semantic Analysis Engine.
+
+This will be a new script that ignores keywords entirely and instead focuses on the meaning of your accomplishments. It will:
+
+Read the full text of all your tagged accomplishments.
+
+Read the full text of the job description.
+
+Use the AI model to find which of your accomplishments are the most conceptually similar to the responsibilities listed in the job.
+

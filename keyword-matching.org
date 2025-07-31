@@ -1,0 +1,60 @@
+#+begin_src python :results output
+import os
+import re
+
+def get_all_keywords(skills_directory):
+  """
+  Scans a directory of .org files to find and collect all ATS_KEYWORDS.
+
+  Args:
+    skills_directory (str): The path to your skills folder.
+
+  Returns:
+    set: A set of all unique keywords found, converted to lowercase.
+  """
+  all_keywords = set()
+  # This regex looks for a line starting with :ATS_KEYWORDS:
+  keyword_property_regex = re.compile(r'^\s*:ATS_KEYWORDS:\s*(.*)', re.IGNORECASE)
+
+  # Walk through every file and folder in the directory
+  for root, dirs, files in os.walk(skills_directory):
+    for file in files:
+      if file.endswith(".org"):
+        file_path = os.path.join(root, file)
+        with open(file_path, 'r', encoding='utf-8') as f:
+          for line in f:
+            match = keyword_property_regex.match(line)
+            if match:
+              # If we find the line, grab the text after the property
+              keywords_text = match.group(1)
+              # Split the keywords by commas and clean them up
+              keywords_list = [kw.strip().lower() for kw in keywords_text.split(',') if kw.strip()]
+              all_keywords.update(keywords_list)
+              # We found the property, no need to read the rest of the file
+              break
+  return all_keywords
+
+# --- EXECUTION ---
+# IMPORTANT: Replace this path with the actual path to your skills folder in WSL2
+# Note: This should point to the 'skills' folder inside your project's 'data' directory
+my_skills_path = '~/projects/career-portfolio/data/skills' 
+
+# On WSL2, Python's os.path.expanduser can handle the '~' symbol
+absolute_skills_path = os.path.expanduser(my_skills_path)
+
+# Run the function and store the result
+master_keyword_list = get_all_keywords(absolute_skills_path)
+
+# Print the results to see if it worked
+print(f"Found {len(master_keyword_list)} unique keywords.")
+# Print a sample to verify
+print("\n--- Sample of Keywords ---")
+print(list(master_keyword_list)[:15])
+
+#+end_src
+
+#+RESULTS:
+: Found 228 unique keywords.
+: 
+: --- Sample of Keywords ---
+: ['kaizen', 'sofr rates.', 'term loans', 'reporting to leadership', 'scalable process', 'system design', 'rag (retrieval-augmented generation)', 'api integration.', 'risk assessment', 'role-playing', 'quantitative analysis', 'funding roadmapping', 'intrapreneurship', 'inbound sales', 'aircall']
