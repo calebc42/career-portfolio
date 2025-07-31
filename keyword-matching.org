@@ -35,15 +35,11 @@ def get_all_keywords(skills_directory):
   return all_keywords
 
 # --- EXECUTION ---
-# IMPORTANT: Replace this path with the actual path to your skills folder in WSL2
-# Note: This should point to the 'skills' folder inside your project's 'data' directory
-my_skills_path = '~/projects/career-portfolio/data/skills' 
-
-# On WSL2, Python's os.path.expanduser can handle the '~' symbol
-absolute_skills_path = os.path.expanduser(my_skills_path)
+# The 'skills' folder is located in the 'data' directory relative to this script.
+my_skills_path = 'data/skills'
 
 # Run the function and store the result
-master_keyword_list = get_all_keywords(absolute_skills_path)
+master_keyword_list = get_all_keywords(my_skills_path)
 
 # Print the results to see if it worked
 print(f"Found {len(master_keyword_list)} unique keywords.")

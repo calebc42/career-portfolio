@@ -1,4 +1,4 @@
-#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+#+begin_src python :results output
   # --- SETUP: Run this command in your WSL2 terminal first ---
   # 1. cd ~/career-portfolio/
   # 2. python3 -m venv .venv
@@ -55,8 +55,10 @@
                           match_skills = skills_regex.match(line)
                           if match_skills:
                               skills_text = match_skills.group(1).strip()
-                              if skills_text: # Only add if it's not empty
-                                  current_accomplishment["skills"] = [s.strip() for s in skills_text.split(']],') if s.strip()]
+                              # Use regex to find all roam-style links, which is more robust
+                              # than splitting by ']],'. This handles multiple links on one line.
+                              if skills_text:
+                                  current_accomplishment["skills"] = re.findall(r'(\[\[.*?\]\])', skills_text)
                               continue
 
                           # Check for STAR text
@@ -118,9 +120,8 @@
 
   # --- 3. EXECUTION ---
 
-  # IMPORTANT: Replace this path with the path to your employment folder in WSL2
-  my_employment_path = '~/Coppermind/roam/career-portfolio/employment'
-  absolute_employment_path = os.path.expanduser(my_employment_path)
+  # The 'employment' folder is located in the 'data' directory relative to this script.
+  my_employment_path = 'data/employment'
 
   # Load the pre-trained AI model. This will be fast on your RTX 5070Ti.
   print("Loading AI model...")
@@ -129,7 +130,7 @@
   print("Model loaded.\n")
 
   # Parse all accomplishment data from your .org files
-  all_accomplishments = parse_accomplishments(absolute_employment_path)
+  all_accomplishments = parse_accomplishments(my_employment_path)
 
   # Run the suggestion engine
   suggest_skills_for_untagged(all_accomplishments, model)
@@ -347,7 +348,6 @@ I need to uninstall the version of Pytorch that I have and reinstall a newer
 version, 12.1.
 
 #+begin_src sh
-cd ~/projects/career-portfolio
 source .venv/bin/activate
 
 pip uninstall torch torchvision torchaudio sentence-transformers
