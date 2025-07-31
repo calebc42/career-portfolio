@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       cc8ee51c-61af-432b-b607-325c962ee475
+:END:
+#+title: Data Analysis
+#+filetags: :SKILL:
+* Data Analysis
+:PROPERTIES:
+:SKILL_NAME: Data Analysis
+:CATEGORY: Data Analysis & Business Intelligence
+:PROFICIENCY: Master
+:ATS_KEYWORDS: Quantitative Analysis, Pipeline Analysis, Funnel Analysis, Trend Analysis, Data Interpretation, Rejection/Error Analysis, Performance Analysis, Data-Driven Decision Making.
+:END:
+
+

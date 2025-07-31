@@ -119,7 +119,7 @@
   # --- 3. EXECUTION ---
 
   # IMPORTANT: Replace this path with the path to your employment folder in WSL2
-  my_employment_path = '~/career-portfolio/employment'
+  my_employment_path = '~/Coppermind/roam/career-portfolio/employment'
   absolute_employment_path = os.path.expanduser(my_employment_path)
 
   # Load the pre-trained AI model. This will be fast on your RTX 5070Ti.
@@ -135,3 +135,228 @@
   suggest_skills_for_untagged(all_accomplishments, model)
 
 #+end_src
+
+#+RESULTS:
+#+begin_example
+Loading AI model...
+Model loaded.
+
+Found 41 tagged accomplishments to use as a reference.
+Found 37 untagged accomplishments to process.
+
+--- Generating Suggestions ---
+
+(1/37) For Untagged Accomplishment: 'High-Quality Service in a High-Volume Environment'
+    (Source: crew_member.org)
+    Most similar tagged accomplishment is: 'Lead Flow Management' (Score: 0.34)
+    SUGGESTED SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]]]
+--------------------------------------------------
+(2/37) For Untagged Accomplishment: 'Food Safety and Certification'
+    (Source: crew_member.org)
+    Most similar tagged accomplishment is: 'Process Documentation and Knowledge Transfer' (Score: 0.36)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]]]
+--------------------------------------------------
+(3/37) For Untagged Accomplishment: 'Versatile Kitchen Operations'
+    (Source: crew_member.org)
+    Most similar tagged accomplishment is: 'Data-Driven Coaching and Leadership' (Score: 0.36)
+    SUGGESTED SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management, [[id:427cbc42-6487-43f3-b7c5-5b928c03a717][Go-to-Market (GTM) Strategy, [[id:1ef76808-21aa-4786-a919-60c96d0c187a][Conversation Intelligence, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]]]]
+--------------------------------------------------
+(4/37) For Untagged Accomplishment: 'Daily Operational Procedures'
+    (Source: crew_member.org)
+    Most similar tagged accomplishment is: 'SBA Loan Packaging and Closing' (Score: 0.37)
+    SUGGESTED SKILLS: [[id:29fd67d5-1ff3-46c7-bd52-9d33a9904701][SBA Regulations, [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing]]]]
+--------------------------------------------------
+(5/37) For Untagged Accomplishment: 'Customer Service and Environment Management'
+    (Source: crew_member.org)
+    Most similar tagged accomplishment is: 'Process Documentation and Knowledge Transfer' (Score: 0.44)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]]]
+--------------------------------------------------
+(6/37) For Untagged Accomplishment: 'Subject-Matter Expertise in a Complex Regulatory Environment'
+    (Source: sba_ppp_loan_forgiveness_agent.org)
+    Most similar tagged accomplishment is: 'In-depth Financial Consultation' (Score: 0.63)
+    SUGGESTED SKILLS: [[id:29fd67d5-1ff3-46c7-bd52-9d33a9904701][SBA Regulations, [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge]]]]
+--------------------------------------------------
+(7/37) For Untagged Accomplishment: 'High-Volume Client Portfolio Management'
+    (Source: sba_ppp_loan_forgiveness_agent.org)
+    Most similar tagged accomplishment is: 'Gaining Team Buy-in' (Score: 0.41)
+    SUGGESTED SKILLS: [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management, [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]]]]
+--------------------------------------------------
+(8/37) For Untagged Accomplishment: 'Financial Document Analysis and Guidance'
+    (Source: sba_ppp_loan_forgiveness_agent.org)
+    Most similar tagged accomplishment is: 'Unlocking Revenue Through Deep Financial Analysis' (Score: 0.53)
+    SUGGESTED SKILLS: [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing, [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis]]]]
+--------------------------------------------------
+(9/37) For Untagged Accomplishment: 'Performance-Based Transition to Full-Time'
+    (Source: sba_ppp_loan_forgiveness_agent.org)
+    Most similar tagged accomplishment is: 'Top Team Performance and Promotion Opportunity' (Score: 0.42)
+    SUGGESTED SKILLS: [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:25e2c834-43a4-4107-9f7a-030444df4f19][Strategic & Business Acumen, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]]]
+--------------------------------------------------
+(10/37) For Untagged Accomplishment: 'Store Operations Management'
+    (Source: sr_sales_representative.org)
+    Most similar tagged accomplishment is: 'Full-Cycle Sales Managment' (Score: 0.43)
+    SUGGESTED SKILLS: [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing]]]]
+--------------------------------------------------
+(11/37) For Untagged Accomplishment: 'Sales Coaching and Huddle System Implementation'
+    (Source: sr_sales_representative.org)
+    Most similar tagged accomplishment is: 'Data-Driven Coaching and Leadership' (Score: 0.63)
+    SUGGESTED SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management, [[id:427cbc42-6487-43f3-b7c5-5b928c03a717][Go-to-Market (GTM) Strategy, [[id:1ef76808-21aa-4786-a919-60c96d0c187a][Conversation Intelligence, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]]]]
+--------------------------------------------------
+(12/37) For Untagged Accomplishment: 'Architecting a B2B Revenue Stream from a Service Function'
+    (Source: sr_sales_representative.org)
+    Most similar tagged accomplishment is: 'Process Documentation and Knowledge Transfer' (Score: 0.49)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]]]
+--------------------------------------------------
+(13/37) For Untagged Accomplishment: 'Real-Time Coaching Process'
+    (Source: sr_sales_representative.org)
+    Most similar tagged accomplishment is: 'Gaining Team Buy-in' (Score: 0.57)
+    SUGGESTED SKILLS: [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management, [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]]]]
+--------------------------------------------------
+(14/37) For Untagged Accomplishment: 'Sustained High Performance'
+    (Source: sr_sales_representative.org)
+    Most similar tagged accomplishment is: 'Revenue Generation' (Score: 0.59)
+    SUGGESTED SKILLS: [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing]]]]
+--------------------------------------------------
+(15/37) For Untagged Accomplishment: 'Subject-Matter Expert for Merger Integration'
+    (Source: integration_specialist.org)
+    Most similar tagged accomplishment is: 'Channel Partner Development' (Score: 0.39)
+    SUGGESTED SKILLS: [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching, [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]]]
+--------------------------------------------------
+(16/37) For Untagged Accomplishment: 'National-Level System Troubleshooting'
+    (Source: integration_specialist.org)
+    Most similar tagged accomplishment is: 'CRM Process Improvement' (Score: 0.50)
+    SUGGESTED SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration, [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching, [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies, [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]]]
+--------------------------------------------------
+(17/37) For Untagged Accomplishment: 'Corporate Training and Onboarding'
+    (Source: integration_specialist.org)
+    Most similar tagged accomplishment is: 'Gaining Team Buy-in' (Score: 0.69)
+    SUGGESTED SKILLS: [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management, [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]]]]
+--------------------------------------------------
+(18/37) For Untagged Accomplishment: 'Customer Retention and Technical Communication'
+    (Source: integration_specialist.org)
+    Most similar tagged accomplishment is: 'Channel Partner Development' (Score: 0.38)
+    SUGGESTED SKILLS: [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching, [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]]]
+--------------------------------------------------
+(19/37) For Untagged Accomplishment: 'Targeted Performance Improvement'
+    (Source: integration_specialist.org)
+    Most similar tagged accomplishment is: 'Top Team Performance and Promotion Opportunity' (Score: 0.56)
+    SUGGESTED SKILLS: [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:25e2c834-43a4-4107-9f7a-030444df4f19][Strategic & Business Acumen, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]]]
+--------------------------------------------------
+(20/37) For Untagged Accomplishment: 'Consultative Sales Execution'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Consultative Selling and Financial Analysis' (Score: 0.52)
+    SUGGESTED SKILLS: [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing, [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing, [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge]]]]
+--------------------------------------------------
+(21/37) For Untagged Accomplishment: 'Upselling and Cross-selling'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Process Documentation and Knowledge Transfer' (Score: 0.45)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]]]
+--------------------------------------------------
+(22/37) For Untagged Accomplishment: 'Personal Goal Setting and Quota Attainment'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Revenue Generation' (Score: 0.57)
+    SUGGESTED SKILLS: [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing]]]]
+--------------------------------------------------
+(23/37) For Untagged Accomplishment: 'Lead Generation and Event Coordination'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Lead Flow Management' (Score: 0.57)
+    SUGGESTED SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]]]
+--------------------------------------------------
+(24/37) For Untagged Accomplishment: 'Operational Adherence'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Process Documentation and Knowledge Transfer' (Score: 0.46)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]]]
+--------------------------------------------------
+(25/37) For Untagged Accomplishment: 'Commitment to Professional Development'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Gaining Team Buy-in' (Score: 0.55)
+    SUGGESTED SKILLS: [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management, [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]]]]
+--------------------------------------------------
+(26/37) For Untagged Accomplishment: 'Performance-Based Promotion'
+    (Source: sales_representative.org)
+    Most similar tagged accomplishment is: 'Sales Cycle Acceleration' (Score: 0.49)
+    SUGGESTED SKILLS: [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management, [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]]]
+--------------------------------------------------
+(27/37) For Untagged Accomplishment: 'Kanban System Design and Implementation'
+    (Source: operations_intern.org)
+    Most similar tagged accomplishment is: 'Process Documentation and Knowledge Transfer' (Score: 0.43)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]]]
+--------------------------------------------------
+(28/37) For Untagged Accomplishment: 'International Process Improvement (CAPA)'
+    (Source: operations_intern.org)
+    Most similar tagged accomplishment is: 'End-to-End Sales Process Architecture' (Score: 0.36)
+    SUGGESTED SKILLS: [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture, [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]]]
+--------------------------------------------------
+(29/37) For Untagged Accomplishment: 'Vendor Relationship Management'
+    (Source: operations_intern.org)
+    Most similar tagged accomplishment is: 'Referral Network Development' (Score: 0.45)
+    SUGGESTED SKILLS: [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management]]]]
+--------------------------------------------------
+(30/37) For Untagged Accomplishment: 'Cross-Functional Systems Collaboration'
+    (Source: operations_intern.org)
+    Most similar tagged accomplishment is: 'Performance Management System Design' (Score: 0.38)
+    SUGGESTED SKILLS: [[id:36765feb-2a84-4d91-80a6-da974c779cad][Technical Prototyping & Development, [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis, [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]]]
+--------------------------------------------------
+(31/37) For Untagged Accomplishment: 'Cross-Functional Project Leadership'
+    (Source: operations_intern.org)
+    Most similar tagged accomplishment is: 'Process Automation with Slack' (Score: 0.42)
+    SUGGESTED SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration, [[id:36765feb-2a84-4d91-80a6-da974c779cad][Technical Prototyping & Development, [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]]]
+--------------------------------------------------
+(32/37) For Untagged Accomplishment: 'Team Leadership and Staff Management'
+    (Source: shift_lead.org)
+    Most similar tagged accomplishment is: 'Data-Driven Coaching and Leadership' (Score: 0.42)
+    SUGGESTED SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management, [[id:427cbc42-6487-43f3-b7c5-5b928c03a717][Go-to-Market (GTM) Strategy, [[id:1ef76808-21aa-4786-a919-60c96d0c187a][Conversation Intelligence, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools, [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]]]]
+--------------------------------------------------
+(33/37) For Untagged Accomplishment: 'Kitchen Workflow and Throughput Optimization'
+    (Source: shift_lead.org)
+    Most similar tagged accomplishment is: 'Lead Flow Management' (Score: 0.50)
+    SUGGESTED SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding, [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]]]
+--------------------------------------------------
+(34/37) For Untagged Accomplishment: 'Financial Closing and Data Management'
+    (Source: shift_lead.org)
+    Most similar tagged accomplishment is: 'Revenue Generation' (Score: 0.46)
+    SUGGESTED SKILLS: [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting, [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing, [[id:34d9c28e-33cb-45bb-b019-5f9a036503ff][Financial Product Knowledge, [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:115e3ac5-46c3-46cb-b8bb-c5d90adbf978][Commercial Lending & Financing]]]]
+--------------------------------------------------
+(35/37) For Untagged Accomplishment: 'Data-Driven Inventory Control and Forecasting'
+    (Source: shift_lead.org)
+    Most similar tagged accomplishment is: 'Financial Modeling and Collaboration' (Score: 0.37)
+    SUGGESTED SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management, [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management, [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis, [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]]]]
+--------------------------------------------------
+(36/37) For Untagged Accomplishment: 'Labor Cost Control and KPI Achievement'
+    (Source: shift_lead.org)
+    Most similar tagged accomplishment is: 'Performance Management System Design' (Score: 0.43)
+    SUGGESTED SKILLS: [[id:36765feb-2a84-4d91-80a6-da974c779cad][Technical Prototyping & Development, [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management, [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development, [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization, [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis, [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies, [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]]]
+--------------------------------------------------
+(37/37) For Untagged Accomplishment: 'Leadership Recognition and Promotion'
+    (Source: shift_lead.org)
+    Most similar tagged accomplishment is: 'Leadership Development' (Score: 0.64)
+    SUGGESTED SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]]
+--------------------------------------------------
+#+end_example
+
+The first execution provided the following errors:
+#+RESULTS:
+: /home/caleb/projects/career-portfolio/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:287: UserWarning: 
+: NVIDIA GeForce RTX 5070 Ti with CUDA capability sm_120 is not compatible with the current PyTorch installation.
+: The current PyTorch install supports CUDA capabilities sm_50 sm_60 sm_70 sm_75 sm_80 sm_86 sm_90.
+: If you want to use the NVIDIA GeForce RTX 5070 Ti GPU with PyTorch, please check the instructions at https://pytorch.org/get-started/locally/
+:
+:   warnings.warn(
+: [ Babel evaluation exited with code 0 ]
+
+I need to uninstall the version of Pytorch that I have and reinstall a newer
+version, 12.1.
+
+#+begin_src sh
+cd ~/projects/career-portfolio
+source .venv/bin/activate
+
+pip uninstall torch torchvision torchaudio sentence-transformers
+
+pip install torch torchvision torchaudio --index-url
+https://download.pytorch.org/whl/cu121
+
+pip install sentence-transformers scikit-learn
+#+end_src
+
+
+

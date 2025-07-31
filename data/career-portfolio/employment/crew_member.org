@@ -1,0 +1,67 @@
+:PROPERTIES:
+:ID:       cf2f98dc-345a-48b1-b815-07517ca85e5e
+:END:
+#+title: Crew Member
+#+filetags: :JOB:
+* Crew Member
+:PROPERTIES:
+:COMPANY: Five Guys
+:POSITION: Crew Member
+:START_DATE: 2015-07-01
+:END_DATE: 2016-02-01
+:SUMMARY: As a Crew Member in a fast-paced, high-volume Five Guys restaurant, the role required versatility and a commitment to quality across all kitchen and customer-facing operations. Responsibilities included mastering every workstation in a rotational system, from food preparation and cooking to cashier duties and maintenance, all while adhering to high standards for order accuracy and food safety.
+:END:
+
+** Accomplishments
+*** ACCOMPLISHMENT: High-Quality Service in a High-Volume Environment
+:PROPERTIES:
+:ID:       deaf9580-42c3-4290-9714-2eaa0e7b4246
+:ROAM_ALIASES: Crew Member: High-Quality Service in a High-Volume Environment
+:SKILLS: [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]
+:SITUATION: In the fast-paced, high-volume environment of a Five Guys kitchen, maintaining both speed and accuracy was critical to customer satisfaction.
+:TASK: To consistently ensure that all customer orders were prepared accurately and delivered in a timely manner, meeting the high standards of the company.
+:ACTION: Diligently followed all procedures for order taking, food preparation, and final quality checks to minimize errors and maximize efficiency during peak hours.
+:RESULT: Maintained high standards of order accuracy and timeliness, contributing to a positive customer experience and the efficient operation of the restaurant.
+:END:
+*** ACCOMPLISHMENT: Food Safety and Certification
+:PROPERTIES:
+:ID:       f42e723d-e2ba-4d75-9413-3c708a549b22
+:ROAM_ALIASES: Crew Member: Food Safety and Certification
+:SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]
+:SITUATION: Operating in a food service environment requires a strict adherence to health and safety standards to protect customers and the business.
+:TASK: To consistently ensure that all customer orders were prepared accurately and delivered in a timely manner, meeting the high standards of the company.
+:ACTION: Diligently followed all procedures for order taking, food preparation, and final quality checks to minimize errors and maximize efficiency during peak hours.
+:RESULT: Maintained high standards of order accuracy and timeliness, contributing to a positive customer experience and the efficient operation of the restaurant.
+:END:
+*** ACCOMPLISHMENT: Versatile Kitchen Operations
+:PROPERTIES:
+:ID:       eb15b324-9c84-47f5-a899-22c2ce693b6a
+:ROAM_ALIASES: Crew Member: Versatile Kitchen Operations
+:SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]
+:SITUATION: The Five Guys operational model relies on a rotational system where crew members must be proficient in all areas of the kitchen to ensure flexibility and continuous workflow.
+:TASK: To operate all kitchen workstations, including the Grill, Fry, and Assembly stations, effectively and efficiently.
+:ACTION: Actively participated in the rotational system, gaining hands-on experience and proficiency at each of the core kitchen workstations.
+:RESULT: Became a versatile and reliable team member capable of operating any station, ensuring the kitchen remained fully functional and efficient at all times.
+:END:
+*** ACCOMPLISHMENT: Daily Operational Procedures
+:PROPERTIES:
+:ID:       4e9a5b2f-0eee-4bc6-8258-e78c7b9643eb
+:ROAM_ALIASES: Crew Member: Daily Operational Procedures
+:SKILLS: [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]]
+:SITUATION: The restaurant's daily readiness and end-of-day shutdown depended on the precise execution of standardized opening and closing procedures.
+:TASK: To perform all required opening and closing duties, including food preparation and comprehensive cleaning.
+:ACTION: Executed daily opening procedures, which involved hours of food preparation to meet forecasted demand for the day. Performed nightly closing procedures, ensuring all equipment was thoroughly cleaned and stored according to company standards.
+:RESULT: Ensured the restaurant was fully prepared for business each morning and properly shut down and secured each night, maintaining operational readiness and cleanliness.
+:END:
+*** ACCOMPLISHMENT: Customer Service and Environment Management
+:PROPERTIES:
+:ID:       6693f2c2-a500-4e29-ad76-1bcd8447809f
+:ROAM_ALIASES: Crew Member: Customer Service and Environment Management
+:SKILLS: [[id:152c0ee3-f1f3-4c87-ad61-cb212565fcca][External Stakeholder Management]], [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]
+:SITUATION: In addition to kitchen duties, the role included direct customer interaction and responsibility for the dining environment.
+:TASK: To manage customer transactions as a cashier and maintain the cleanliness of the lobby area.
+:ACTION: Operated the Point of Sale (POS) system to handle customer transactions accurately and efficiently. Regularly monitored and maintained the cleanliness and order of the customer lobby.
+:RESULT: Provided friendly and efficient customer service and maintained a clean, welcoming environment for diners.
+:END:
+
+

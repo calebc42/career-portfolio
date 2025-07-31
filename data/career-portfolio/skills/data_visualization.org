@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       ebacfc11-0eb0-4b40-81fb-3bec773435b4
+:END:
+#+title: Data Visualization
+#+filetags: :SKILL:
+* Data Visualization
+:PROPERTIES:
+:SKILL_NAME: Data Visualization
+:CATEGORY: Data Analysis & Business Intelligence
+:PROFICIENCY: Master
+:ATS_KEYWORDS: Microsoft Excel, MS Excel, Spreadsheet Software, Spreadsheet Proficiency, Data Manipulation, Data Visualization, Pivot Tables, VLOOKUP, IMPORTRANGE, Salesforce Connector, Financial Modeling, Reporting, Data Tracking, Google Sheets.
+:END:
+
+

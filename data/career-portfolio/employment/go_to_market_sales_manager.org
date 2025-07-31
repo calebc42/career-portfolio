@@ -1,0 +1,146 @@
+:PROPERTIES:
+:ID:       1f101801-be97-440e-a9a2-5929d1680a96
+:END:
+#+title: Go-to-Market Sales Manager
+#+filetags: :JOB:
+* Go-to-Market Sales Manager
+:PROPERTIES:
+:COMPANY: Lendio
+:POSITION: Go-to-Market Sales Manager
+:START_DATE: 2023-05-01
+:END_DATE: 2023-10-31
+:SUMMARY: Recruited by the Director of Operations to build and lead a new Go-to-Market sales division from the ground up for a new tax credit product. As the founding manager, I was responsible for architecting the entire operational framework. This included designing the end-to-end sales process, evaluating and implementing the tech stack, building the team's performance management system from scratch in Google Sheets, and scaling the team from 0 to 15 reps—including the company's first successful offshore team—in under five months.
+
+** Accomplishments
+*** ACCOMPLISHMENT: Rapid Onboarding and Training Program Development
+:PROPERTIES:
+:ID:       986c4963-6d0b-47f8-bf09-7bbe0c4d4dda
+:ROAM_ALIASES: Go-to-Market Sales Manager: Rapid Onboarding and Training Program Development
+:SKILLS: [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]], [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies]], [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching]], [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]
+:SITUATION: The team was scaling rapidly and needed a way to onboard new reps and make them productive as quickly as possible.
+:TASK: To create a fast and effective onboarding program for new hires.
+:ACTION:  Co-developed and designed a 2-day fast-track training program that was built to be iteratively improved based on data from common objections.
+:RESULT: Co-developed and designed a 2-day fast-track training program, reducing new hire ramp time by 60% from a full week to just two days..
+:END:
+*** ACCOMPLISHMENT: Sales Cycle Acceleration
+:PROPERTIES:
+:ID:       65fafd79-0b13-4ba3-b1c2-410040a4a0ba
+:ROAM_ALIASES: Go-to-Market Sales Manager: Sales Cycle Acceleration
+:SKILLS: [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]], [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies]], [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]
+:SITUATION: The initial sales process was spending too much time on leads who were ultimately ineligible for the tax credit.
+:TASK: To refine the sales process to disqualify ineligible leads faster, thereby accelerating the overall sales cycle.
+:ACTION: Coached the sales team on how to quickly identify and disqualify ineligible leads based on a deep understanding of FFCRA tax code regulations.
+:RESULT: Accelerated the sales cycle by 32% by ensuring sales reps focused their time and effort on high-potential, eligible leads.
+:END:
+*** ACCOMPLISHMENT: Strategic Partner Managment
+:PROPERTIES:
+:ID:       e9ec8078-427e-4cde-a11c-92d1e80b97fc
+:ROAM_ALIASES: Go-to-Market Sales Manager: Strategic Partner Managment
+:SKILLS: [[id:152c0ee3-f1f3-4c87-ad61-cb212565fcca][External Stakeholder Management]], [[id:25e2c834-43a4-4107-9f7a-030444df4f19][Strategic & Business Acumen]], [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]
+:SITUATION: The tax credit product relied on a partnership with an external accounting firm that handled the final filing process.
+:TASK: To manage the strategic partnership to ensure operational alignment.
+:ACTION: Managed the day-to-day strategic partnership with the external accounting firm, ensuring operational alignment and facilitating a smooth end-to-end tax credit filing process for clients.
+:RESULT: Maintained a positive and effective working relationship with a critical external partner, ensuring the viability of the end-to-end product offering.
+:END:
+*** ACCOMPLISHMENT: Offshore Team Building
+:PROPERTIES:
+:ID:       c270c6e5-c850-43f5-ac39-34104d1e9895
+:ROAM_ALIASES: Go-to-Market Sales Manager: Offshore Team Building
+:SKILLS: [[id:427cbc42-6487-43f3-b7c5-5b928c03a717][Go-to-Market (GTM) Strategy]], [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]
+:SITUATION: To scale the team quickly and cost-effectively, the company decided to pilot its first offshore team.
+:TASK: To act as the hiring manager and successfully launch the company's first offshore team in Jamaica reducing the cost-per-rep by 50% compared to the onshore team.
+:ACTION: As the hiring manager, conducted interviews and scaled the team from 8 to 15 representatives, which included the successful hiring, onboarding, and management of a 7-person offshore team in Jamaica.
+:RESULT: Scaled the new sales division by 87% in under 5 months and established the company's first successful offshore team, creating a model for future international expansion.
+:END:
+*** ACCOMPLISHMENT: Lead Flow Management
+:PROPERTIES:
+:ID:       53cd8b80-2041-4570-9b81-40f34e7f1aec
+:ROAM_ALIASES: Go-to-Market Sales Manager: Lead Flow Management
+:SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration]], [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization]], [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]], [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]
+:SITUATION: With a growing team, leads needed to be distributed equitably and efficiently to ensure timely follow-up.
+:TASK: To manage the lead flow and distribution process within Salesforce.
+:ACTION: Managed the technical process of lead flow and distribution within Salesforce, ensuring the "Speed to Lead" round-robin system was functioning correctly.
+:RESULT: Ensured equitable and timely lead follow-up from the sales team, maximizing the opportunity of every inbound lead.
+:END:
+*** ACCOMPLISHMENT: Leadership Development
+:PROPERTIES:
+:ID:       6c48f2d4-f523-42b8-839f-ce5807336c1a
+:ROAM_ALIASES: Go-to-Market Sales Manager: Leadership Development
+:SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], 
+:SITUATION: As a new manager, formal leadership training was offered to enhance management skills.
+:TASK: To complete the assigned leadership development courses.
+:ACTION: Completed formal leadership development training through Franklin Covey courses.
+:RESULT: Gained new skills and frameworks for effective leadership and management.
+:END:
+*** ACCOMPLISHMENT: Data-Driven Coaching and Leadership
+:PROPERTIES:
+:ID:       181a932f-254f-4ae3-93b2-13a0dbbcaee9
+:ROAM_ALIASES: Go-to-Market Sales Manager: Data-Driven Coaching and Leadership
+:SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]], [[id:427cbc42-6487-43f3-b7c5-5b928c03a717][Go-to-Market (GTM) Strategy]], [[id:1ef76808-21aa-4786-a919-60c96d0c187a][Conversation Intelligence]], [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization]], [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools]], [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis]], [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]]
+:SITUATION: The rapidly growing team required consistent, data-driven coaching to ensure performance and alignment.
+:TASK: To lead daily huddles and conduct 1:1s using performance data to provide targeted coaching.
+:ACTION: Led daily huddles to set strategy and motivation. Conducted data-driven 1:1s, using the custom dashboards and random call scoring exercises to provide targeted coaching and improve individual performance.
+:RESULT: Fostered a high-performance culture and improved team results through a structured, data-driven coaching cadence.
+:END:
+*** ACCOMPLISHMENT: CRM Process Improvement
+:PROPERTIES:
+:ID:       f84b37de-eab8-46ea-86a8-76f02e8c75e4
+:ROAM_ALIASES: Go-to-Market Sales Manager: CRM Process Improvement
+:SKILLS: [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration]], [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching]], [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies]], [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]], [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]
+:SITUATION: Errors in the integration between the company website and the Salesforce instance were causing friction in the customer journey and lost leads.
+:TASK: To manage the development queue with a Salesforce developer to resolve these critical integration errors.
+:ACTION: Identified and documented critical CRM integration errors, submitted tickets to the Salesforce developer, and managed the development queue to ensure their timely resolution.
+:RESULT: Resolved critical customer-facing integration issues, which streamlined the CRM process and directly improved conversion rates by 7%.
+:END:
+*** ACCOMPLISHMENT: Performance Management System Design
+:PROPERTIES:
+:ID:       dbaefd9d-93f0-4d20-85ee-01d83316127c
+:ROAM_ALIASES: Go-to-Market Sales Manager: Performance Management System Design
+:SKILLS: [[id:36765feb-2a84-4d91-80a6-da974c779cad][Technical Prototyping & Development]], [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management]], [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], [[id:ebacfc11-0eb0-4b40-81fb-3bec773435b4][Data Visualization]], [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis]], [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]
+:SITUATION: To manage the new team effectively, a system was needed to track KPIs and analyze the sales funnel, but no official BI resources were yet available.
+:TASK: To build a performance management system from scratch using available tools.
+:ACTION: Built the team's entire performance management system in Google Sheets, using the Salesforce Connector to pull in data. Created dashboards to track KPIs and analyze the sales funnel for coaching opportunities.
+:RESULT: Created a robust, real-time performance management system that provided full visibility into the sales funnel and enabled data-driven coaching from day one.
+:END:
+*** ACCOMPLISHMENT: Technology Stack Implementation
+:PROPERTIES:
+:ID:       6209cfb5-d343-44b0-90d7-b027c1501e6b
+:ROAM_ALIASES: Go-to-Market Sales Manager: Technology Stack Implementation
+:SKILLS: [[id:36765feb-2a84-4d91-80a6-da974c779cad][Technical Prototyping & Development]], [[id:a5bb8f4b-1733-4857-a02f-cfd10c93b613][CRM & Sales Tech Administration]], [[id:cb136ce9-4e48-4e2a-b051-b402e346c121][Specific Software & Tools]], [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]]
+:SITUATION: The new team needed a sales dialer and engagement software to manage leads effectively.
+:TASK: To evaluate vendors, select a software solution, and implement it for the team.
+:ACTION: Evaluated sales software vendors, selected Kixie as the solution, and collaborated with their Account Manager to implement call/text automation and a "Speed to Lead" round-robin methodology for lead distribution.
+:RESULT: Successfully implemented a new technology solution that increased the speed and efficiency of lead follow-up.
+:END:
+*** ACCOMPLISHMENT: Financial Modeling and Collaboration
+:PROPERTIES:
+:ID:       cc12bef7-4206-4c94-990c-d6eb6cac7b67
+:ROAM_ALIASES: Go-to-Market Sales Manager: Financial Modeling and Collaboration
+:SKILLS: [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]], [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management]], [[id:e671d377-3c0e-4d54-b276-c22cc65d053f][Financial & Credit Analysis]], [[id:11421750-74d3-4294-b308-509b44e2caea][BI & Dashboarding]]
+:SITUATION: As a new business unit, a financial model was needed to forecast profitability and guide strategic decisions.
+:TASK: To collaborate with Business Intelligence and Operations to build the division's financial model.
+:ACTION: Worked closely with the Business Intelligence and Operations teams, providing key inputs and assumptions to build the division's financial model and forecast its profitability.
+:RESULT: Contributed to the creation of a sound financial model that was used to manage the division and report on its performance.
+:END:
+*** ACCOMPLISHMENT: End-to-End Sales Process Architecture
+:PROPERTIES:
+:ID:       f8a9683c-05d9-4685-8207-fa219451cf7f
+:ROAM_ALIASES: Go-to-Market Sales Manager: End-to-End Sales Process Architecture
+:SKILLS: [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]], [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]]
+:SITUATION: A new tax credit product required a completely new sales process, as none existed.
+:TASK: To design and document the entire sales process, from lead qualification to closing.
+:ACTION: Architected the end-to-end sales process, which included creating all scripting, designing the lead qualification workflow based on a deep analysis of the FFCRA tax code, and developing the messaging.
+:RESULT: Created a clear, effective, and compliant sales process that enabled the rapid and successful launch of the new product line.
+:END:
+*** ACCOMPLISHMENT: Building and Scaling a Go-to-Market Sales Division
+:PROPERTIES:
+:ID:       ac9d2f61-ad85-4e00-9292-d700c43d39fc
+:ROAM_ALIASES: Go-to-Market Sales Manager: Building and Scaling a Go-to-Market Sales Division
+:SKILLS: [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]], [[id:427cbc42-6487-43f3-b7c5-5b928c03a717][Go-to-Market (GTM) Strategy]], [[id:25e2c834-43a4-4107-9f7a-030444df4f19][Strategic & Business Acumen]], [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting]], [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing]], [[id:f6ff3c04-b14d-4fce-baff-9be4a6a7448f][Process Improvement Methodologies]]
+:SITUATION: Based on past performance, I was recruited by the Director of Operations to build and lead an entirely new Go-to-Market sales team for a new product.
+:TASK: To build the team, define the sales process, implement the technology, and rapidly scale revenue from the ground up.
+:ACTION: Acted as the hiring manager, scaling the team from 0 to 15 representatives (including the company's first offshore team). Architected the end-to-end sales process and built the team's entire performance management system from scratch.
+:RESULT: Drove the division's monthly revenue from $100k to over $350k, achieving a $4.05MM annual run rate before the product line was dissolved due to a partner issue. Received a formal Letter of Recommendation for successfully architecting and scaling the division.
+:END:
+
+

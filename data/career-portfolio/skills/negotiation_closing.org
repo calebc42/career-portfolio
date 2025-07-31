@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       4e59e599-f5f1-4662-883c-f2ca12835085
+:END:
+#+title: Negotiation & Closing
+#+filetags: :SKILL:
+* Negotiation & Closing
+:PROPERTIES:
+:SKILL_NAME: Negotiation & Closing
+:CATEGORY: Sales & Sales Operations
+:PROFICIENCY: Master
+:ATS_KEYWORDS: Multi-party Negotiation, Deal Structuring, Offer-to-Close Rate, Pricing, Term Negotiation, Closing Techniques, Upselling & Cross-selling.
+:END:
+
+

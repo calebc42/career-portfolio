@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       1ef76808-21aa-4786-a919-60c96d0c187a
+:END:
+#+title: Conversation Intelligence
+#+filetags: :SKILL:
+* Conversation Intelligence
+:PROPERTIES:
+:SKILL_NAME: Conversation Intelligence
+:CATEGORY: Data Analysis & Business Intelligence
+:PROFICIENCY: Master
+:ATS_KEYWORDS: Gong.io, Call Shadowing, Call Data Analysis, Keyword Analysis, Best Practice Identification.
+:END:
+
+

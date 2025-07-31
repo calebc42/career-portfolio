@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       34d9c28e-33cb-45bb-b019-5f9a036503ff
+:END:
+#+title: Financial Product Knowledge
+#+filetags: :SKILL:
+* Financial Product Knowledge
+:PROPERTIES:
+:SKILL_NAME: Financial Product Knowledge
+:CATEGORY: Finance & Lending
+:PROFICIENCY: Proficient
+:ATS_KEYWORDS: Term Loans, Lines of Credit, Merchant Cash Advances (MCAs), Sale Leasebacks, Bridge Loans, Equipment Leases (EFA, FMV), SOFR Rates.
+:END:
+
+

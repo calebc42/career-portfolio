@@ -1,0 +1,14 @@
+:PROPERTIES:
+:ID:       36765feb-2a84-4d91-80a6-da974c779cad
+:END:
+#+title: Technical Prototyping & Development
+#+filetags: :SKILL:
+* Technical Prototyping & Development
+:PROPERTIES:
+:SKILL_NAME: Technical Prototyping & Development
+:CATEGORY: Process, Systems & Technology
+:PROFICIENCY: Proficient
+:ATS_KEYWORDS: Python, SQL, Data Engineering, RAG (Retrieval-Augmented Generation), AI/LLM Integration, ChromaDB, LangChain, SentenceTransformers, API Integration.
+:END:
+
+
