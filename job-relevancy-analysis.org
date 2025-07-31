@@ -46,9 +46,8 @@ def analyze_job_description(job_text, keyword_set):
   return (found, missing, score)
 
 # --- EXECUTION ---
-my_skills_path = '~/projects/career-portfolio/data/skills'
-absolute_skills_path = os.path.expanduser(my_skills_path)
-master_keyword_list = get_all_keywords(absolute_skills_path)
+my_skills_path = 'data/skills'
+master_keyword_list = get_all_keywords(my_skills_path)
 
 # --- PASTE A JOB DESCRIPTION HERE ---
 sample_job_description = """
@@ -174,9 +173,8 @@ def analyze_job_description_v2(job_text, keyword_set):
   return (found, missing, score)
 
 # --- EXECUTION ---
-my_skills_path = '~/projects/career-portfolio/data/skills'
-absolute_skills_path = os.path.expanduser(my_skills_path)
-master_keyword_list = get_all_keywords(absolute_skills_path)
+my_skills_path = 'data/skills'
+master_keyword_list = get_all_keywords(my_skills_path)
 
 # --- PASTE A JOB DESCRIPTION HERE ---
 sample_job_description = """
