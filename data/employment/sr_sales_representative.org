@@ -17,7 +17,7 @@
 :PROPERTIES:
 :ID:       d0c31925-3615-4137-b831-b8ac5509e3e8
 :ROAM_ALIASES: Sr. Sales Representative: Store Operations Management
-:SKILLS:
+:SKILLS: [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]], [[id:bd19eb7e-b205-477a-be1f-5285dc8831ba][Stakeholder Management]]
 :SITUATION: In the absence of senior management, a designated leader was needed to ensure the store continued to operate smoothly and securely.
 :TASK: To manage all daily store operations, including customer queue management, opening/closing procedures, cash handling, and nightly inventory counts.
 :ACTION: Acted as the manager-on-duty, managing the customer queue, executing opening and closing procedures, handling all cash operations, and conducting nightly inventory stock counts as a designated keyholder.
@@ -27,7 +27,7 @@
 :PROPERTIES:
 :ID:       03198ced-78dc-4366-ac11-7c209c2f14f3
 :ROAM_ALIASES: Sr. Sales Representative: Sales Coaching and Huddle System Implementation
-:SKILLS:
+:SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], [[id:7893d2ee-6016-45b1-8fa8-e677a35ec46e][Systems Thinking & Design]], [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching]], [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]
 :SITUATION: The sales team required daily structure and motivation to maintain focus and performance throughout the day.
 :TASK: To develop and lead a daily huddle system to set goals and motivate the team.
 :ACTION: Developed and led daily sales huddles, coaching team members on setting individual goals based on foot-traffic volume and seasonality. Created and ran friendly sales competitions to drive motivation.
@@ -37,7 +37,7 @@
 :PROPERTIES:
 :ID:       3351183c-a2b1-470b-967a-09ca40c120dd
 :ROAM_ALIASES: Sr. Sales Representative: Architecting a B2B Revenue Stream from a Service Function
-:SKILLS:
+:SKILLS: [[id:1330fa1d-d329-4473-b026-075446f04114][Sales Process Architecture]], [[id:cc8ee51c-61af-432b-b607-325c962ee475][Data Analysis]]
 :SITUATION: The store's status as a district repair hub created a high volume of non-revenue service traffic, which represented an untapped opportunity.
 :TASK: To create a process to convert service interactions into a consistent sales pipeline for both B2B and consumer accounts.
 :ACTION: Designed and implemented a repeatable "account audit" process. While customers waited for repairs, collaborated with technicians to review their accounts, identify upsell opportunities, and uncover qualified B2B leads based on business ownership structures.
@@ -47,7 +47,7 @@
 :PROPERTIES:
 :ID:       3ab3ffa4-97f6-41d4-94ea-7f36188b39e2
 :ROAM_ALIASES: Sr. Sales Representative: Real-Time Coaching Process
-:SKILLS:
+:SKILLS: [[id:55baf1b2-605f-4d9f-b9b5-0f9fd69e0449][Team Leadership & Development]], [[id:fb94c057-15b8-4532-acfb-3330ebc03cd5][Internal Stakeholder Management]], [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing]], [[id:f0027a8a-7352-4c3f-8935-f6727bd07fe1][Sales Enablement & Coaching]]
 :SITUATION: To improve the quality of sales interactions and prevent lost opportunities, a real-time coaching mechanism was needed.
 :TASK: To implement a system for providing real-time coaching to sales reps before they engaged with customers.
 :ACTION: Implemented a pre-transaction "huddle" system at the inventory safe checkpoint. This served as a just-in-time coaching opportunity to review deal specifics, reinforce process, and strategize on objection handling.
@@ -57,7 +57,7 @@
 :PROPERTIES:
 :ID:       a6fbc41e-f08a-465f-98a3-1ae9ddde45b9
 :ROAM_ALIASES: Sr. Sales Representative: Sustained High Performance
-:SKILLS:
+:SKILLS: [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management]], [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]], [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting]]
 :SITUATION: After being promoted to a senior role with additional leadership responsibilities, it was critical to maintain a high level of personal sales performance.
 :TASK: To continue to meet and exceed personal sales targets while performing leadership duties.
 :ACTION: Continued to apply effective sales strategies and work ethic to personal sales goals.

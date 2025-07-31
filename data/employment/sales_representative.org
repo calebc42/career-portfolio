@@ -17,7 +17,7 @@
 :PROPERTIES:
 :ID:       a42ccf9d-cd40-40b2-9502-c8b289e56e4e
 :ROAM_ALIASES: Sales Representative: Consultative Sales Execution
-:SKILLS: 
+:SKILLS: [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management]]
 :SITUATION: In a competitive telecom market, a consultative approach was necessary to differentiate from competitors and truly meet customer needs.
 :TASK: To use the "Live, Work, Play" framework to ask strategic questions, uncover customer needs, and present tailored proposals.
 :ACTION: Conducted consultative sales conversations by asking strategic questions to understand each customer's unique lifestyle and work requirements, then presented tailored proposals and pricing quotes that directly addressed those needs.
@@ -27,7 +27,7 @@
 :PROPERTIES:
 :ID:       fe84e4ba-4209-4ced-bc22-dc3fc9ce0a63
 :ROAM_ALIASES: Sales Representative: Upselling and Cross-selling
-:SKILLS:
+:SKILLS: [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing]], [[id:25e2c834-43a4-4107-9f7a-030444df4f19][Strategic & Business Acumen]]
 :SITUATION: Upselling and Cross-selling
 :TASK: To maintain extensive knowledge of all products and services to effectively identify and act on upsell and cross-sell opportunities.
 :ACTION: Maintained comprehensive knowledge of all plans, devices, and accessories, enabling the effective upselling and cross-selling of additional products and services during sales consultations.
@@ -37,7 +37,7 @@
 :PROPERTIES:
 :ID:       f31efc6b-3919-4559-9fe6-e54b4836083d
 :ROAM_ALIASES: Sales Representative: Personal Goal Setting and Quota Attainment
-:SKILLS: 
+:SKILLS: [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]], 
 :SITUATION: Consistent performance in a sales role requires proactive planning and a strategic approach to meeting monthly targets.
 :TASK: To set daily and weekly personal sales goals to strategically plan for and consistently meet or exceed monthly sales quotas.
 :ACTION:  Set and tracked daily and weekly personal sales goals, creating a clear roadmap to strategically meet and surpass monthly quotas.
@@ -47,7 +47,7 @@
 :PROPERTIES:
 :ID:       7a842c31-5c3a-4666-8051-93f03e6bdfc9
 :ROAM_ALIASES: Sales Representative: Lead Generation and Event Coordination
-:SKILLS: 
+:SKILLS: [[id:d5aa9d0a-46ba-4e73-84d5-b2d408dd8bfd][Lead Generation and Prospecting]]
 :SITUATION: Proactive lead generation was required to supplement regular foot traffic and create additional sales opportunities.
 :TASK: To coordinate in-store events to generate leads and drive sales.
 :ACTION: Coordinated in-store events by generating new leads, conducting follow-up calls, and setting appointments to drive targeted traffic into the store.
@@ -57,7 +57,7 @@
 :PROPERTIES:
 :ID:       0f97e49e-773d-4890-8e6f-d15cc9d133d3
 :ROAM_ALIASES: Sales Representative: Operational Adherence
-:SKILLS: 
+:SKILLS: [[id:8a4795d4-1374-4ffa-a3f4-022f5047b0e5][Project & Operations Management]]
 :SITUATION: Handling transactions and customer information requires strict adherence to operational procedures to protect the company from loss and fraud.
 :TASK: To adhere to all operational procedures for loss prevention and fraud prevention during every customer transaction.
 :ACTION: Meticulously followed all company policies and procedures related to transaction processing, inventory control, and customer data security.
@@ -67,7 +67,7 @@
 :PROPERTIES:
 :ID:       66996061-37f3-4efa-8569-34bc77ffbb31
 :ROAM_ALIASES: Sales Representative: Commitment to Professional Development
-:SKILLS: 
+:SKILLS: [[id:b278bc24-d074-4d8f-ac49-7ef139dbbedc][Peformance Management]]
 :SITUATION: To maintain a position as a top performer, continuous learning and skill development were essential.
 :TASK: To actively seek out opportunities to improve sales skills and product knowledge.
 :ACTION: Actively sought out continuous training and participated in additional role-playing opportunities to refine and improve sales and negotiation skills.
@@ -77,7 +77,7 @@
 :PROPERTIES:
 :ID:       ac4c5c9f-ac79-44ba-afe2-a65013f10761
 :ROAM_ALIASES: Sales Representative: Performance-Based Promotion
-:SKILLS: 
+:SKILLS: [[id:4e59e599-f5f1-4662-883c-f2ca12835085][Negotiation & Closing]], [[id:24f8b898-0a06-4d04-b530-2c71db7d1a91][Full-Cycle Sales Management]], 
 :SITUATION: After consistently exceeding sales targets and demonstrating leadership qualities, an opportunity for advancement became available.
 :TASK: To meet the performance and leadership criteria for a promotion to a senior role.
 :ACTION: Consistently exceeded sales targets and actively demonstrated leadership potential within the team.
