@@ -1,0 +1,181 @@
+The following script will audit the ChromaDB in order to critically examine the
+output for the following:
+
+Completeness:
+- Does the number of documents match what your processing script reported (116)?
+
+Chunk Quality: Read through a few of the Document (Chunk) entries.
+- Do they make sense?
+- Is the formatting correct (e.g., At {company} as a {position}...)?
+- Is the text garbled or are there any weird characters?
+
+Metadata Accuracy:
+
+- Does the type (Job Summary, Accomplishment, Skill) correctly match the chunk content?
+- For accomplishments, are the company, position, and title all correct?
+- Is the source file path accurate for each chunk?
+
+ID Uniqueness: Quickly scan the ID column. Are the IDs unique and descriptive
+(e.g., .../sales_representative.org-acc-0, .../sales_representative.org-acc-1)?
+
+This is crucial for the database to function correctly.
+
+#+begin_src python :results output
+import chromadb
+import pandas as pd
+
+# --- Configuration ---
+CHROMA_PATH = 'resume_db'
+COLLECTION_NAME = 'resume'
+
+def audit_database():
+    """
+    Connects to the ChromaDB, retrieves all data,
+    and prints it for review.
+    """
+    print(f"--- Auditing ChromaDB at: {CHROMA_PATH} ---")
+
+    # 1. Connect to the persistent database
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+
+    # 2. Get the collection
+    try:
+        collection = client.get_collection(name=COLLECTION_NAME)
+        print(f"Successfully connected to collection '{COLLECTION_NAME}'.")
+        print(f"Total documents: {collection.count()}\n")
+    except Exception as e:
+        print(f"[X] Error: Could not get collection '{COLLECTION_NAME}'.")
+        print(f"    Please ensure the database exists and the name is correct.")
+        print(f"    Details: {e}")
+        return
+
+    # 3. Retrieve all data from the collection
+    retrieved_data = collection.get(include=["metadatas", "documents"])
+
+    # 4. Print in a structured way
+    if not retrieved_data or not retrieved_data.get('ids'):
+        print("[!] The collection appears to be empty.")
+        return
+
+    df = pd.DataFrame({
+        'ID': retrieved_data['ids'],
+        'Document (Chunk)': retrieved_data['documents'],
+        'Metadata': retrieved_data['metadatas']
+    })
+
+    # Configure pandas to show full text
+    pd.set_option('display.max_rows', None)
+    pd.set_option('display.max_colwidth', None)
+    pd.set_option('display.width', 1000)
+
+    print("--- Database Contents ---")
+    print(df)
+    print("\n--- End of Audit ---")
+
+if __name__ == '__main__':
+    audit_database()
+#+end_src
+
+#+RESULTS:
+#+begin_example
+--- Auditing ChromaDB at: resume_db ---
+Successfully connected to collection 'resume'.
+Total documents: 90
+
+--- Database Contents ---
+                                                                             ID  ...                                                                                                                                                                                                          Metadata
+0                                     ./data/employment/crew_member.org-summary  ...                                                                                                       {'position': 'N/A', 'type': 'Job Summary', 'company': 'N/A', 'source': './data/employment/crew_member.org'}
+1                                       ./data/employment/crew_member.org-acc-0  ...                                      {'source': './data/employment/crew_member.org', 'type': 'Accomplishment', 'company': 'N/A', 'position': 'N/A', 'title': 'High-Quality Service in a High-Volume Environment'}
+2                                       ./data/employment/crew_member.org-acc-1  ...                                                          {'company': 'N/A', 'position': 'N/A', 'title': 'Food Safety and Certification', 'source': './data/employment/crew_member.org', 'type': 'Accomplishment'}
+3                                       ./data/employment/crew_member.org-acc-2  ...                                                           {'source': './data/employment/crew_member.org', 'type': 'Accomplishment', 'title': 'Versatile Kitchen Operations', 'position': 'N/A', 'company': 'N/A'}
+4                                       ./data/employment/crew_member.org-acc-3  ...                                                           {'position': 'N/A', 'type': 'Accomplishment', 'title': 'Daily Operational Procedures', 'source': './data/employment/crew_member.org', 'company': 'N/A'}
+5                                       ./data/employment/crew_member.org-acc-4  ...                                            {'source': './data/employment/crew_member.org', 'type': 'Accomplishment', 'position': 'N/A', 'title': 'Customer Service and Environment Management', 'company': 'N/A'}
+6                  ./data/employment/sba_ppp_loan_forgiveness_agent.org-summary  ...                                                                                    {'source': './data/employment/sba_ppp_loan_forgiveness_agent.org', 'type': 'Job Summary', 'company': 'N/A', 'position': 'N/A'}
+7                    ./data/employment/sba_ppp_loan_forgiveness_agent.org-acc-0  ...        {'source': './data/employment/sba_ppp_loan_forgiveness_agent.org', 'title': 'Subject-Matter Expertise in a Complex Regulatory Environment', 'position': 'N/A', 'company': 'N/A', 'type': 'Accomplishment'}
+8                    ./data/employment/sba_ppp_loan_forgiveness_agent.org-acc-1  ...                             {'company': 'N/A', 'type': 'Accomplishment', 'position': 'N/A', 'title': 'High-Volume Client Portfolio Management', 'source': './data/employment/sba_ppp_loan_forgiveness_agent.org'}
+9                    ./data/employment/sba_ppp_loan_forgiveness_agent.org-acc-2  ...                            {'type': 'Accomplishment', 'company': 'N/A', 'position': 'N/A', 'title': 'Financial Document Analysis and Guidance', 'source': './data/employment/sba_ppp_loan_forgiveness_agent.org'}
+10                   ./data/employment/sba_ppp_loan_forgiveness_agent.org-acc-3  ...                           {'title': 'Performance-Based Transition to Full-Time', 'company': 'N/A', 'type': 'Accomplishment', 'position': 'N/A', 'source': './data/employment/sba_ppp_loan_forgiveness_agent.org'}
+11                        ./data/employment/sr_sales_representative.org-summary  ...                                                                                           {'company': 'N/A', 'source': './data/employment/sr_sales_representative.org', 'position': 'N/A', 'type': 'Job Summary'}
+12                          ./data/employment/sr_sales_representative.org-acc-0  ...                                                {'source': './data/employment/sr_sales_representative.org', 'title': 'Store Operations Management', 'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A'}
+13                          ./data/employment/sr_sales_representative.org-acc-1  ...                            {'position': 'N/A', 'company': 'N/A', 'title': 'Sales Coaching and Huddle System Implementation', 'source': './data/employment/sr_sales_representative.org', 'type': 'Accomplishment'}
+14                          ./data/employment/sr_sales_representative.org-acc-2  ...                  {'title': 'Architecting a B2B Revenue Stream from a Service Function', 'source': './data/employment/sr_sales_representative.org', 'position': 'N/A', 'company': 'N/A', 'type': 'Accomplishment'}
+15                          ./data/employment/sr_sales_representative.org-acc-3  ...                                                 {'position': 'N/A', 'title': 'Real-Time Coaching Process', 'company': 'N/A', 'source': './data/employment/sr_sales_representative.org', 'type': 'Accomplishment'}
+16                          ./data/employment/sr_sales_representative.org-acc-4  ...                                                 {'company': 'N/A', 'type': 'Accomplishment', 'position': 'N/A', 'title': 'Sustained High Performance', 'source': './data/employment/sr_sales_representative.org'}
+17                        ./data/employment/commercial_loan_officer.org-summary  ...                                                                                           {'source': './data/employment/commercial_loan_officer.org', 'type': 'Job Summary', 'company': 'N/A', 'position': 'N/A'}
+18                          ./data/employment/commercial_loan_officer.org-acc-0  ...                                                         {'company': 'N/A', 'title': 'Revenue Generation', 'type': 'Accomplishment', 'source': './data/employment/commercial_loan_officer.org', 'position': 'N/A'}
+19                          ./data/employment/commercial_loan_officer.org-acc-1  ...                                                     {'title': 'Autonomous Performance', 'company': 'N/A', 'position': 'N/A', 'type': 'Accomplishment', 'source': './data/employment/commercial_loan_officer.org'}
+20                          ./data/employment/commercial_loan_officer.org-acc-2  ...                                                 {'type': 'Accomplishment', 'title': 'Strategic Funding Roadmaps', 'company': 'N/A', 'source': './data/employment/commercial_loan_officer.org', 'position': 'N/A'}
+21                          ./data/employment/commercial_loan_officer.org-acc-3  ...                                                             {'company': 'N/A', 'source': './data/employment/commercial_loan_officer.org', 'title': 'SBA Compliance', 'type': 'Accomplishment', 'position': 'N/A'}
+22                          ./data/employment/commercial_loan_officer.org-acc-4  ...                                               {'type': 'Accomplishment', 'source': './data/employment/commercial_loan_officer.org', 'title': 'Referral Network Development', 'position': 'N/A', 'company': 'N/A'}
+23                          ./data/employment/commercial_loan_officer.org-acc-5  ...                                                         {'type': 'Accomplishment', 'title': 'Financial Analysis', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/commercial_loan_officer.org'}
+24                          ./data/employment/commercial_loan_officer.org-acc-6  ...                                             {'source': './data/employment/commercial_loan_officer.org', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A', 'title': 'SBA Loan Packaging and Closing'}
+25                          ./data/employment/commercial_loan_officer.org-acc-7  ...                                               {'company': 'N/A', 'type': 'Accomplishment', 'title': 'High-Volume Loan Origination', 'source': './data/employment/commercial_loan_officer.org', 'position': 'N/A'}
+26                          ./data/employment/commercial_loan_officer.org-acc-8  ...                                                 {'type': 'Accomplishment', 'position': 'N/A', 'title': 'Full-Cycle Sales Managment', 'source': './data/employment/commercial_loan_officer.org', 'company': 'N/A'}
+27                         ./data/employment/integration_specialist.org-summary  ...                                                                                            {'type': 'Job Summary', 'source': './data/employment/integration_specialist.org', 'company': 'N/A', 'position': 'N/A'}
+28                           ./data/employment/integration_specialist.org-acc-0  ...                                {'source': './data/employment/integration_specialist.org', 'type': 'Accomplishment', 'company': 'N/A', 'title': 'Subject-Matter Expert for Merger Integration', 'position': 'N/A'}
+29                           ./data/employment/integration_specialist.org-acc-1  ...                                       {'title': 'National-Level System Troubleshooting', 'company': 'N/A', 'position': 'N/A', 'type': 'Accomplishment', 'source': './data/employment/integration_specialist.org'}
+30                           ./data/employment/integration_specialist.org-acc-2  ...                                           {'position': 'N/A', 'title': 'Corporate Training and Onboarding', 'type': 'Accomplishment', 'source': './data/employment/integration_specialist.org', 'company': 'N/A'}
+31                           ./data/employment/integration_specialist.org-acc-3  ...                              {'type': 'Accomplishment', 'company': 'N/A', 'source': './data/employment/integration_specialist.org', 'position': 'N/A', 'title': 'Customer Retention and Technical Communication'}
+32                           ./data/employment/integration_specialist.org-acc-4  ...                                            {'source': './data/employment/integration_specialist.org', 'company': 'N/A', 'title': 'Targeted Performance Improvement', 'type': 'Accomplishment', 'position': 'N/A'}
+33                  ./data/employment/business_relationship_manager.org-summary  ...                                                                                     {'source': './data/employment/business_relationship_manager.org', 'position': 'N/A', 'type': 'Job Summary', 'company': 'N/A'}
+34                    ./data/employment/business_relationship_manager.org-acc-0  ...                                              {'title': 'High-Volume Prospecting', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/business_relationship_manager.org', 'type': 'Accomplishment'}
+35                    ./data/employment/business_relationship_manager.org-acc-1  ...                          {'company': 'N/A', 'type': 'Accomplishment', 'title': 'Consultative Selling and Financial Analysis', 'source': './data/employment/business_relationship_manager.org', 'position': 'N/A'}
+36                    ./data/employment/business_relationship_manager.org-acc-2  ...                                          {'type': 'Accomplishment', 'title': 'Channel Partner Development', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/business_relationship_manager.org'}
+37                    ./data/employment/business_relationship_manager.org-acc-3  ...                                    {'company': 'N/A', 'position': 'N/A', 'source': './data/employment/business_relationship_manager.org', 'type': 'Accomplishment', 'title': 'Strategic Business Model Analysis'}
+38                                ./data/employment/sales_associate.org-summary  ...                                                                                                   {'source': './data/employment/sales_associate.org', 'type': 'Job Summary', 'position': 'N/A', 'company': 'N/A'}
+39                     ./data/employment/go_to_market_sales_manager.org-summary  ...                                                                                        {'type': 'Job Summary', 'source': './data/employment/go_to_market_sales_manager.org', 'company': 'N/A', 'position': 'N/A'}
+40                       ./data/employment/go_to_market_sales_manager.org-acc-0  ...                       {'source': './data/employment/go_to_market_sales_manager.org', 'type': 'Accomplishment', 'company': 'N/A', 'title': 'Rapid Onboarding and Training Program Development', 'position': 'N/A'}
+41                       ./data/employment/go_to_market_sales_manager.org-acc-1  ...                                                {'title': 'Sales Cycle Acceleration', 'company': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org', 'position': 'N/A', 'type': 'Accomplishment'}
+42                       ./data/employment/go_to_market_sales_manager.org-acc-2  ...                                             {'title': 'Strategic Partner Managment', 'company': 'N/A', 'type': 'Accomplishment', 'position': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org'}
+43                       ./data/employment/go_to_market_sales_manager.org-acc-3  ...                                                  {'position': 'N/A', 'type': 'Accomplishment', 'source': './data/employment/go_to_market_sales_manager.org', 'title': 'Offshore Team Building', 'company': 'N/A'}
+44                       ./data/employment/go_to_market_sales_manager.org-acc-4  ...                                                    {'type': 'Accomplishment', 'title': 'Lead Flow Management', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org'}
+45                       ./data/employment/go_to_market_sales_manager.org-acc-5  ...                                                  {'title': 'Leadership Development', 'source': './data/employment/go_to_market_sales_manager.org', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A'}
+46                       ./data/employment/go_to_market_sales_manager.org-acc-6  ...                                     {'type': 'Accomplishment', 'position': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org', 'title': 'Data-Driven Coaching and Leadership', 'company': 'N/A'}
+47                       ./data/employment/go_to_market_sales_manager.org-acc-7  ...                                                 {'position': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org', 'type': 'Accomplishment', 'title': 'CRM Process Improvement', 'company': 'N/A'}
+48                       ./data/employment/go_to_market_sales_manager.org-acc-8  ...                                    {'position': 'N/A', 'title': 'Performance Management System Design', 'type': 'Accomplishment', 'company': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org'}
+49                       ./data/employment/go_to_market_sales_manager.org-acc-9  ...                                         {'source': './data/employment/go_to_market_sales_manager.org', 'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A', 'title': 'Technology Stack Implementation'}
+50                      ./data/employment/go_to_market_sales_manager.org-acc-10  ...                                    {'company': 'N/A', 'source': './data/employment/go_to_market_sales_manager.org', 'title': 'Financial Modeling and Collaboration', 'position': 'N/A', 'type': 'Accomplishment'}
+51                      ./data/employment/go_to_market_sales_manager.org-acc-11  ...                                   {'company': 'N/A', 'position': 'N/A', 'title': 'End-to-End Sales Process Architecture', 'type': 'Accomplishment', 'source': './data/employment/go_to_market_sales_manager.org'}
+52                      ./data/employment/go_to_market_sales_manager.org-acc-12  ...                      {'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A', 'title': 'Building and Scaling a Go-to-Market Sales Division', 'source': './data/employment/go_to_market_sales_manager.org'}
+53                           ./data/employment/sales_representative.org-summary  ...                                                                                              {'company': 'N/A', 'type': 'Job Summary', 'source': './data/employment/sales_representative.org', 'position': 'N/A'}
+54                             ./data/employment/sales_representative.org-acc-0  ...                                                  {'source': './data/employment/sales_representative.org', 'title': 'Consultative Sales Execution', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A'}
+55                             ./data/employment/sales_representative.org-acc-1  ...                                                   {'type': 'Accomplishment', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/sales_representative.org', 'title': 'Upselling and Cross-selling'}
+56                             ./data/employment/sales_representative.org-acc-2  ...                                    {'type': 'Accomplishment', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/sales_representative.org', 'title': 'Personal Goal Setting and Quota Attainment'}
+57                             ./data/employment/sales_representative.org-acc-3  ...                                        {'company': 'N/A', 'position': 'N/A', 'type': 'Accomplishment', 'source': './data/employment/sales_representative.org', 'title': 'Lead Generation and Event Coordination'}
+58                             ./data/employment/sales_representative.org-acc-4  ...                                                         {'title': 'Operational Adherence', 'company': 'N/A', 'type': 'Accomplishment', 'source': './data/employment/sales_representative.org', 'position': 'N/A'}
+59                             ./data/employment/sales_representative.org-acc-5  ...                                        {'source': './data/employment/sales_representative.org', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A', 'title': 'Commitment to Professional Development'}
+60                             ./data/employment/sales_representative.org-acc-6  ...                                                   {'source': './data/employment/sales_representative.org', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A', 'title': 'Performance-Based Promotion'}
+61                              ./data/employment/operations_intern.org-summary  ...                                                                                                 {'source': './data/employment/operations_intern.org', 'position': 'N/A', 'type': 'Job Summary', 'company': 'N/A'}
+62                                ./data/employment/operations_intern.org-acc-0  ...                                          {'title': 'Kanban System Design and Implementation', 'source': './data/employment/operations_intern.org', 'company': 'N/A', 'type': 'Accomplishment', 'position': 'N/A'}
+63                                ./data/employment/operations_intern.org-acc-1  ...                                         {'title': 'International Process Improvement (CAPA)', 'source': './data/employment/operations_intern.org', 'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A'}
+64                                ./data/employment/operations_intern.org-acc-2  ...                                                   {'position': 'N/A', 'source': './data/employment/operations_intern.org', 'type': 'Accomplishment', 'title': 'Vendor Relationship Management', 'company': 'N/A'}
+65                                ./data/employment/operations_intern.org-acc-3  ...                                           {'company': 'N/A', 'source': './data/employment/operations_intern.org', 'position': 'N/A', 'title': 'Cross-Functional Systems Collaboration', 'type': 'Accomplishment'}
+66                                ./data/employment/operations_intern.org-acc-4  ...                                              {'type': 'Accomplishment', 'title': 'Cross-Functional Project Leadership', 'position': 'N/A', 'source': './data/employment/operations_intern.org', 'company': 'N/A'}
+67                                     ./data/employment/shift_lead.org-summary  ...                                                                                                        {'type': 'Job Summary', 'position': 'N/A', 'source': './data/employment/shift_lead.org', 'company': 'N/A'}
+68                                       ./data/employment/shift_lead.org-acc-0  ...                                                    {'source': './data/employment/shift_lead.org', 'title': 'Team Leadership and Staff Management', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A'}
+69                                       ./data/employment/shift_lead.org-acc-1  ...                                            {'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A', 'source': './data/employment/shift_lead.org', 'title': 'Kitchen Workflow and Throughput Optimization'}
+70                                       ./data/employment/shift_lead.org-acc-2  ...                                                   {'title': 'Financial Closing and Data Management', 'source': './data/employment/shift_lead.org', 'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A'}
+71                                       ./data/employment/shift_lead.org-acc-3  ...                                           {'source': './data/employment/shift_lead.org', 'company': 'N/A', 'position': 'N/A', 'title': 'Data-Driven Inventory Control and Forecasting', 'type': 'Accomplishment'}
+72                                       ./data/employment/shift_lead.org-acc-4  ...                                                  {'title': 'Labor Cost Control and KPI Achievement', 'position': 'N/A', 'company': 'N/A', 'source': './data/employment/shift_lead.org', 'type': 'Accomplishment'}
+73                                       ./data/employment/shift_lead.org-acc-5  ...                                                    {'source': './data/employment/shift_lead.org', 'title': 'Leadership Recognition and Promotion', 'company': 'N/A', 'position': 'N/A', 'type': 'Accomplishment'}
+74  ./data/employment/traditional_lending_subject_matter_expert_sme.org-summary  ...                                                                     {'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'company': 'N/A', 'type': 'Job Summary', 'position': 'N/A'}
+75    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-0  ...  {'company': 'N/A', 'position': 'N/A', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'type': 'Accomplishment', 'title': 'Architecting a Data-Driven Sales Enablement Program'}
+76    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-1  ...  {'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A', 'title': 'Proactive Lead Identification and Pipeline Analysis', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org'}
+77    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-2  ...                                  {'position': 'N/A', 'title': 'Gaining Team Buy-in', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'company': 'N/A', 'type': 'Accomplishment'}
+78    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-3  ...                        {'title': 'Process Automation with Slack', 'type': 'Accomplishment', 'position': 'N/A', 'company': 'N/A', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org'}
+79    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-4  ...                      {'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'title': 'In-depth Financial Consultation', 'company': 'N/A', 'position': 'N/A', 'type': 'Accomplishment'}
+80    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-5  ...                             {'type': 'Accomplishment', 'position': 'N/A', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'company': 'N/A', 'title': 'Strategic Sales Coaching'}
+81    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-6  ...                    {'type': 'Accomplishment', 'title': 'ROI Modeling for Sales Enablement', 'company': 'N/A', 'position': 'N/A', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org'}
+82    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-7  ...        {'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'position': 'N/A', 'title': 'Conversation Intelligence and Remote Coaching', 'company': 'N/A', 'type': 'Accomplishment'}
+83    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-8  ...                             {'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'title': 'Cross-Functional Liaison', 'position': 'N/A', 'type': 'Accomplishment', 'company': 'N/A'}
+84    ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-9  ...                        {'type': 'Accomplishment', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'title': 'New Product Adoption Coaching', 'company': 'N/A', 'position': 'N/A'}
+85   ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-10  ...                 {'title': 'Performance Management System Design', 'company': 'N/A', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'type': 'Accomplishment', 'position': 'N/A'}
+86   ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-11  ...                                  {'type': 'Accomplishment', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'company': 'N/A', 'title': 'Pipeline Management', 'position': 'N/A'}
+87   ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-12  ...    {'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'type': 'Accomplishment', 'title': 'Unlocking Revenue Through Deep Financial Analysis', 'position': 'N/A', 'company': 'N/A'}
+88   ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-13  ...       {'company': 'N/A', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'title': 'Top Team Performance and Promotion Opportunity', 'position': 'N/A', 'type': 'Accomplishment'}
+89   ./data/employment/traditional_lending_subject_matter_expert_sme.org-acc-14  ...         {'source': './data/employment/traditional_lending_subject_matter_expert_sme.org', 'position': 'N/A', 'title': 'Process Documentation and Knowledge Transfer', 'company': 'N/A', 'type': 'Accomplishment'}
+
+[90 rows x 3 columns]
+
+--- End of Audit ---
+#+end_example

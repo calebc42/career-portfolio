@@ -1,0 +1,695 @@
+The following Python script is for parsing each org-roam employment node and
+structuring the contents into a JSON file.
+
+For each node:
+1. It looks for top-level properties like COMPANY, POSITION, etc.
+
+2. It identifies Accomplishment blocks starting with *** ACCOMPLISHMENT:.
+
+3. Within each accomplishment, it parses the SITUATION, TASK, ACTION, and RESULT properties.
+
+#+RESULTS:
+
+#+begin_src python :results output
+  import json
+  import re
+
+  def parse_org_file(file_path):
+      """
+      Parses a structured .org file and converts it into a JSON object.
+      This is a simplified parser designed for your specific org-roam structure.
+      """
+      with open(file_path, 'r') as f:
+          content = f.read()
+
+      # --- Basic Information Extraction ---
+      # Extracts top-level properties for the job role
+      job_details = {}
+      properties_pattern = re.compile(r'^\s*:(\S+):\s+(.*)', re.MULTILINE)
+      top_level_properties = re.search(r'\* Business Relationship Manager\n:PROPERTIES:(.*?):END:', content, re.DOTALL)
+
+      if top_level_properties:
+          for match in properties_pattern.finditer(top_level_properties.group(1)):
+              key = match.group(1).lower().replace('-', '_')
+              value = match.group(2).strip()
+              job_details[key] = value
+
+      # Extract the summary text
+      summary_match = re.search(r':SUMMARY:\s+(.*?)\n:END:', content, re.DOTALL)
+      if summary_match:
+          job_details['summary'] = summary_match.group(1).replace('\n', ' ').strip()
+
+
+      # --- Accomplishment Extraction ---
+      accomplishments = []
+      # Regex to find each accomplishment block
+      accomplishment_pattern = re.compile(r'\*\*\* ACCOMPLISHMENT: (.*?)\n:PROPERTIES:(.*?):END:', re.DOTALL)
+      # Regex for parsing SITUATION, TASK, ACTION, RESULT (STAR) items
+      star_pattern = re.compile(r':(SITUATION|TASK|ACTION|RESULT):\s+(.*?)\n(?=:|\s*\*|$)', re.DOTALL)
+
+      for acc_match in accomplishment_pattern.finditer(content):
+          accomplishment_title = acc_match.group(1).strip()
+          properties_block = acc_match.group(2)
+
+          acc_obj = {'accomplishment': accomplishment_title}
+
+          # Find all STAR matches within the properties block
+          star_items = star_pattern.findall(properties_block)
+          for key, value in star_items:
+              # Clean up the value text
+              cleaned_value = value.replace('\n', ' ').strip()
+              acc_obj[key.lower()] = cleaned_value
+
+          accomplishments.append(acc_obj)
+
+      job_details['accomplishments'] = accomplishments
+
+      return json.dumps(job_details, indent=2)
+
+  # --- ---
+  # Main Execution
+  # --- ---
+  file_to_parse = 'data/employment/business_relationship_manager.org'
+
+  try:
+      parsed_json = parse_org_file(file_to_parse)
+      print(parsed_json)
+  except FileNotFoundError:
+      print(f"Error: The file was not found at '{file_to_parse}'.")
+      print("Please make sure the file path is correct relative to where you are running the script.")
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+{
+  "company": "TCS Equipment Finance",
+  "position": "Business Relationship Manager",
+  "start_date": "2023-02-01",
+  "end_date": "2023-05-31",
+  "summary": "Recruited into this role, I was formally trained on the Sandler consultative selling methodology and tasked with full-cycle, middle-market prospecting. Using tools like D&B Hoovers and ZoomInfo, I executed a high-volume cold calling strategy to build a pipeline of opportunities with C-level executives. While successful in building a pipeline, I quickly identified a fundamental misalignment between the company's high-volume GTM strategy and its highly selective credit policy, which led to a strategic pivot.",
+  "accomplishments": [
+    {
+      "accomplishment": "High-Volume Prospecting",
+      "situation": "The role required building a new pipeline of middle-market opportunities from scratch",
+      "task": "To execute a high-volume prospecting strategy to identify and engage qualified leads at companies with $20MM-$100MM in annual revenue.",
+      "action": "Utilized D&B Hoovers and Zoominfo to analyze market trends and identify leads, then executed a high-volume prospecting strategy that included making 100+ daily cold calls to C-level decision-makers.",
+      "result": "Successfully built a robust pipeline of middle-market opportunities and demonstrated proficiency in high-volume cold calling and C-level engagement."
+    },
+    {
+      "accomplishment": "Consultative Selling and Financial Analysis",
+      "situation": "Engaging C-level executives and securing financial packages required a sophisticated, consultative sales approach.",
+      "task": "To apply the Sandler methodology to conduct needs analysis and collect full financial packages for underwriting review.",
+      "action": "Applied the Sandler consultative selling methodology to engage C-level executives, conduct a thorough needs analysis, and collect full financial packages. Packaged loan documents and conducted DSCR and cash flow analysis to price deals using current SOFR rates and ensure internal compliance.",
+      "result": "Effectively managed a consultative sales process with sophisticated executive buyers, from initial engagement to underwriting submission."
+    },
+    {
+      "accomplishment": "Channel Partner Development",
+      "situation": "To supplement direct prospecting efforts, the company utilized a channel partner strategy.",
+      "task": "To onboard new ISOs and train their brokers to generate additional funding opportunities.",
+      "action": "Successfully onboarded two new Independent Sales Organizations (ISOs) and trained their brokers on our specific credit box and product-market fit.",
+      "result": "Generated additional funding opportunities by successfully developing and enabling new channel partners."
+    },
+    {
+      "accomplishment": "Strategic Business Model Analysis",
+      "situation": "Despite successfully building a pipeline, deals were not progressing through the credit committee.",
+      "task": "To understand the root cause of the bottleneck between sales and credit approval.",
+      "action": "Quickly analyzed the company's operations and identified a systemic misalignment between its high-volume, broad-based go-to-market strategy and its highly selective, \"A-paper\" credit underwriting policies.",
+      "result": "Made a proactive and strategic career pivot after identifying that the core business model was flawed, demonstrating a high level of strategic and business model analysis."
+    }
+  ]
+}
+#+end_example
+
+Now that we have a script that can parse a single file, it's time to expand it
+to process the entire career portfolio. We will then take the parsed text and
+convert it into vector embeddings.
+
+We will use a library called SentenceTransformers to create these embeddings and
+ChromaDB to store and search them.
+
+The updated script will do the following:
+
+Walk the Directory: It will scan the career-portfolio/employment and
+career-portfolio/skills directories for .org files.
+
+Parses Each File: It will use a slightly modified version of the prior parser to
+handle different file types (jobs vs. skills).
+
+Creates Text Chunks: It prepares the parsed data into chunks of text that are
+meaningful to embed (e.g., each accomplishment becomes a chunk).
+
+Generates and Stores Embeddings: It uses SentenceTransformers to convert these
+text chunks into numerical vectors and then stores them in a local ChromaDB
+database.
+
+#+name: process_portfolio
+#+begin_src python :results output
+import os
+import re
+import json
+import chromadb
+from sentence_transformers import SentenceTransformer
+
+# --- Configuration ---
+PORTFOLIO_PATH = '.'
+CHROMA_PATH = 'resume_db'
+COLLECTION_NAME = 'resume'
+MODEL_NAME = 'all-MiniLM-L6-v2' # A good, small starting model
+
+# --- 1. Parsing Logic ---
+def parse_job_file(content, file_path):
+    """Parses an employment .org file."""
+    data = {'file_path': file_path, 'type': 'employment'}
+    properties_pattern = re.compile(r'^\s*:(\S+):\s+(.*)', re.MULTILINE)
+    
+    # Get top-level job details
+    main_properties = re.search(r'\* .*\n:PROPERTIES:(.*?):END:', content, re.DOTALL)
+    if main_properties:
+        for match in properties_pattern.finditer(main_properties.group(1)):
+            key = match.group(1).lower()
+            data[key] = match.group(2).strip()
+
+    # Get summary
+    summary_match = re.search(r':SUMMARY:\s+(.*?)(?:\n:END:|\Z)', content, re.DOTALL)
+    if summary_match:
+        data['summary'] = re.sub(r'\s+', ' ', summary_match.group(1)).strip()
+
+    # Get accomplishments using the STAR method
+    data['accomplishments'] = []
+    accomplishment_pattern = re.compile(r'\*\*\* ACCOMPLISHMENT: (.*?)\n:PROPERTIES:(.*?):END:', re.DOTALL)
+    star_pattern = re.compile(r':(SITUATION|TASK|ACTION|RESULT):\s+(.*?)(?=\n:|\s*\*|$)', re.DOTALL)
+
+    for acc_match in accomplishment_pattern.finditer(content):
+        acc_obj = {'title': acc_match.group(1).strip()}
+        properties_block = acc_match.group(2)
+        for key, value in star_pattern.findall(properties_block):
+            acc_obj[key.lower()] = re.sub(r'\s+', ' ', value).strip()
+        data['accomplishments'].append(acc_obj)
+        
+    return data
+
+def parse_skill_file(content, file_path):
+    """Parses a skill .org file."""
+    data = {'file_path': file_path, 'type': 'skill'}
+    properties_pattern = re.compile(r'^\s*:(\S+):\s+(.*)', re.MULTILINE)
+    
+    main_properties = re.search(r'\* .*\n:PROPERTIES:(.*?):END:', content, re.DOTALL)
+    if main_properties:
+        for match in properties_pattern.finditer(main_properties.group(1)):
+            key = match.group(1).lower()
+            data[key] = match.group(2).strip()
+    return data
+    
+# --- 2. Text Chunking Logic ---
+def create_chunks(parsed_data):
+    """Creates searchable text chunks from parsed data."""
+    chunks = []
+    metadata = []
+    ids = []
+
+    if parsed_data.get('type') == 'employment':
+        # Create a chunk for the overall job summary
+        job_summary = f"Job Title: {parsed_data.get('position')} at {parsed_data.get('company')}. Summary: {parsed_data.get('summary')}"
+        chunks.append(job_summary)
+        meta = {'source': parsed_data['file_path'], 'type': 'Job Summary'}
+        metadata.append(meta)
+        ids.append(f"{parsed_data['file_path']}-summary")
+
+        # Create a chunk for each accomplishment
+        for i, acc in enumerate(parsed_data.get('accomplishments', [])):
+            chunk_text = (
+                f"At {parsed_data.get('company')} as a {parsed_data.get('position')}, "
+                f"I achieved the following: {acc.get('title')}. "
+                f"Situation: {acc.get('situation', 'N/A')}. "
+                f"Task: {acc.get('task', 'N/A')}. "
+                f"Action: {acc.get('action', 'N/A')}. "
+                f"Result: {acc.get('result', 'N/A')}."
+            )
+            chunks.append(chunk_text)
+            meta = {
+                'source': parsed_data['file_path'], 
+                'type': 'Accomplishment', 
+                'title': acc.get('title')
+            }
+            metadata.append(meta)
+            ids.append(f"{parsed_data['file_path']}-acc-{i}")
+
+    elif parsed_data.get('type') == 'skill':
+        chunk_text = (
+            f"Skill: {parsed_data.get('skill_name')}. "
+            f"Category: {parsed_data.get('category')}. "
+            f"Proficiency: {parsed_data.get('proficiency')}. "
+            f"Keywords: {parsed_data.get('ats_keywords')}."
+        )
+        chunks.append(chunk_text)
+        meta = {'source': parsed_data['file_path'], 'type': 'Skill'}
+        metadata.append(meta)
+        ids.append(f"{parsed_data['file_path']}-skill")
+        
+    return chunks, metadata, ids
+
+# --- 3. Main Execution Logic ---
+def main():
+    """Main function to parse, chunk, and embed the portfolio."""
+    all_chunks = []
+    all_metadata = []
+    all_ids = []
+
+    # Walk through the portfolio directory
+    for root, dirs, files in os.walk(PORTFOLIO_PATH):
+        for file in files:
+            if file.endswith('.org') and not file.endswith('~'):
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    # Choose parser based on directory
+                    parsed_data = None
+                    if 'employment' in root:
+                        parsed_data = parse_job_file(content, file_path)
+                    elif 'skills' in root:
+                        parsed_data = parse_skill_file(content, file_path)
+
+                    if parsed_data:
+                        chunks, metadata, ids = create_chunks(parsed_data)
+                        all_chunks.extend(chunks)
+                        all_metadata.extend(metadata)
+                        all_ids.extend(ids)
+
+                except Exception as e:
+                    print(f"Error processing {file_path}: {e}")
+
+    if not all_chunks:
+        print("No chunks were created. Please check file paths and parsing logic.")
+        return
+
+    print(f"Successfully created {len(all_chunks)} chunks from your portfolio.")
+
+    # --- 4. Embedding and Storing ---
+    print("Initializing embedding model...")
+    model = SentenceTransformer(MODEL_NAME)
+    
+    print("Initializing vector database...")
+    # Using a persistent client to save the DB to disk
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    
+    # Get or create the collection
+    collection = client.get_or_create_collection(name=COLLECTION_NAME)
+
+    print(f"Generating embeddings for {len(all_chunks)} chunks... (This may take a moment)")
+    embeddings = model.encode(all_chunks, show_progress_bar=True)
+    
+    print("Adding documents to the vector database...")
+    # ChromaDB requires ids to be strings, and embeddings to be lists of floats
+    collection.add(
+        embeddings=embeddings.tolist(),
+        documents=all_chunks,
+        metadatas=all_metadata,
+        ids=all_ids
+    )
+
+    print("\n--- Success! ---")
+    print(f"Your resume has been processed and stored in the vector database.")
+    print(f"Total documents in collection '{COLLECTION_NAME}': {collection.count()}")
+    
+    # Optional: Test a query
+    print("\n--- Testing a query ---")
+    query_text = "experience with data-driven coaching"
+    results = collection.query(
+        query_texts=[query_text],
+        n_results=2
+    )
+    print(f"Query: '{query_text}'")
+    for i, doc in enumerate(results['documents'][0]):
+        print(f"Result {i+1}:")
+        print(f"  - Document: {doc[:200]}...") # Print first 200 chars
+        print(f"  - Metadata: {results['metadatas'][0][i]}")
+        print(f"  - Distance: {results['distances'][0][i]:.4f}")
+
+
+if __name__ == '__main__':
+    main()
+#+end_src
+
+#+RESULTS: process_portfolio
+#+begin_example
+Error processing ./.#parse-resume.org: [Errno 2] No such file or directory: './.#parse-resume.org'
+Successfully created 116 chunks from your portfolio.
+Initializing embedding model...
+Initializing vector database...
+Generating embeddings for 116 chunks... (This may take a moment)
+Adding documents to the vector database...
+
+--- Success! ---
+Your resume has been processed and stored in the vector database.
+Total documents in collection 'resume': 116
+
+--- Testing a query ---
+Query: 'experience with data-driven coaching'
+Result 1:
+  - Document: At None as a None, I achieved the following: Data-Driven Coaching and Leadership. Situation: The rapidly growing team required consistent, data-driven coaching to ensure performance and alignment.. Ta...
+  - Metadata: {'source': './data/employment/go_to_market_sales_manager.org', 'type': 'Accomplishment', 'title': 'Data-Driven Coaching and Leadership'}
+  - Distance: 0.5251
+Result 2:
+  - Document: At None as a None, I achieved the following: Conversation Intelligence and Remote Coaching. Situation: Coaching a remote team of 15 sales reps required a data-driven and scalable approach.. Task: To p...
+  - Metadata: {'title': 'Conversation Intelligence and Remote Coaching', 'type': 'Accomplishment', 'source': './data/employment/traditional_lending_subject_matter_expert_sme.org'}
+  - Distance: 0.7906
+#+end_example
+
+The "None as a None" is idicative that the "*** Acomplishment"'s are not being
+tied back to the parent "Company" and "Position" of the node.
+
+#+name: process_portfolio_the_real_fix
+#+begin_src python :results output
+import os
+import re
+import json
+import chromadb
+import shutil
+from sentence_transformers import SentenceTransformer
+
+# --- Configuration ---
+PORTFOLIO_PATH = '.'
+CHROMA_PATH = 'resume_db'
+COLLECTION_NAME = 'resume'
+MODEL_NAME = 'all-MiniLM-L6-v2'
+
+# --- 1. NEW, MORE ROBUST PARSING LOGIC ---
+def parse_org_file(content, file_path, file_type):
+    """
+    Robustly parses an .org file by iterating through lines to find the
+    main heading and its associated properties drawer.
+    """
+    data = {'file_path': file_path, 'type': file_type}
+    lines = content.splitlines()
+    
+    found_heading = False
+    in_properties_block = False
+
+    # Find the main properties block associated with the first H1 heading
+    for line in lines:
+        if line.startswith('* ') and not line.startswith('**'):
+            found_heading = True
+            continue # Move to the next line after finding the heading
+
+        if found_heading:
+            if line.strip() == ':PROPERTIES:':
+                in_properties_block = True
+                continue
+            
+            if line.strip() == ':END:':
+                if in_properties_block:
+                    # We've found and processed the block we care about, so we can stop.
+                    break 
+            
+            if in_properties_block:
+                match = re.match(r'^\s*:(\S+):\s+(.*)', line)
+                if match:
+                    key = match.group(1).lower()
+                    data[key] = match.group(2).strip()
+
+    # --- Extract Summary and Accomplishments (No changes to this part) ---
+    summary_match = re.search(r':SUMMARY:\s+(.*?)(?:\n:END:|\Z)', content, re.DOTALL)
+    if summary_match:
+        data['summary'] = re.sub(r'\s+', ' ', summary_match.group(1)).strip()
+
+    if file_type == 'employment':
+        data['accomplishments'] = []
+        acc_pattern = re.compile(r'\*\*\* ACCOMPLISHMENT: (.*?)\n:PROPERTIES:(.*?):END:', re.DOTALL)
+        star_pattern = re.compile(r':(SITUATION|TASK|ACTION|RESULT):\s+(.*?)(?=\n:|\s*\*|$)', re.DOTALL)
+
+        for acc_match in acc_pattern.finditer(content):
+            acc_obj = {'title': acc_match.group(1).strip()}
+            properties_block = acc_match.group(2)
+            for key, value in star_pattern.findall(properties_block):
+                acc_obj[key.lower()] = re.sub(r'\s+', ' ', value).strip()
+            data['accomplishments'].append(acc_obj)
+    
+    # Add a final check for logging purposes
+    if file_type == 'employment' and ('company' not in data or 'position' not in data):
+        print(f"  [!] Warning: Could not find Company/Position in: {file_path}")
+
+    return data
+
+# --- 2. Text Chunking Logic (Unchanged) ---
+def create_chunks(parsed_data):
+    chunks = []
+    metadata = []
+    ids = []
+
+    if parsed_data.get('type') == 'employment':
+        company = parsed_data.get('company', 'N/A')
+        position = parsed_data.get('position', 'N/A')
+
+        if parsed_data.get('summary'):
+            job_summary = f"Job Title: {position} at {company}. Summary: {parsed_data.get('summary')}"
+            chunks.append(job_summary)
+            meta = {'source': parsed_data['file_path'], 'type': 'Job Summary', 'company': company, 'position': position}
+            metadata.append(meta)
+            ids.append(f"{parsed_data['file_path']}-summary")
+
+        for i, acc in enumerate(parsed_data.get('accomplishments', [])):
+            chunk_text = (f"At {company} as a {position}, I achieved the following: {acc.get('title')}. Situation: {acc.get('situation', 'N/A')}. Task: {acc.get('task', 'N/A')}. Action: {acc.get('action', 'N/A')}. Result: {acc.get('result', 'N/A')}.")
+            chunks.append(chunk_text)
+            meta = {'source': parsed_data['file_path'], 'type': 'Accomplishment', 'title': acc.get('title'), 'company': company, 'position': position}
+            metadata.append(meta)
+            ids.append(f"{parsed_data['file_path']}-acc-{i}")
+
+    elif parsed_data.get('type') == 'skill' and parsed_data.get('skill_name'):
+        chunk_text = (f"Skill: {parsed_data.get('skill_name')}. Category: {parsed_data.get('category')}. Proficiency: {parsed_data.get('proficiency')}. Keywords: {parsed_data.get('ats_keywords')}.")
+        chunks.append(chunk_text)
+        meta = {'source': parsed_data['file_path'], 'type': 'Skill'}
+        metadata.append(meta)
+        ids.append(f"{parsed_data['file_path']}-skill")
+        
+    return chunks, metadata, ids
+
+# --- 3. Main Execution Logic (Unchanged) ---
+def main():
+    if os.path.exists(CHROMA_PATH):
+        print("--- Deleting old database for a fresh start ---")
+        shutil.rmtree(CHROMA_PATH)
+
+    all_chunks, all_metadata, all_ids = [], [], []
+    for root, dirs, files in os.walk(PORTFOLIO_PATH):
+        if any(sub in root for sub in ['employment', 'skills']):
+            for file in files:
+                if file.endswith('.org') and not file.endswith('~') and not file.startswith('.#'):
+                    file_path = os.path.join(root, file)
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                        
+                        file_type = 'skill' if 'skills' in root else 'employment'
+                        parsed_data = parse_org_file(content, file_path, file_type)
+
+                        if parsed_data:
+                            chunks, metadata, ids = create_chunks(parsed_data)
+                            all_chunks.extend(chunks)
+                            all_metadata.extend(metadata)
+                            all_ids.extend(ids)
+                    except Exception as e:
+                        print(f"  [X] Error processing {file_path}: {e}")
+    
+    if not all_chunks:
+        print("No chunks were created. Please check file paths and parsing logic.")
+        return
+
+    print(f"Successfully created {len(all_chunks)} chunks from your portfolio.")
+    model = SentenceTransformer(MODEL_NAME)
+    embeddings = model.encode(all_chunks, show_progress_bar=True)
+    
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    collection = client.get_or_create_collection(name=COLLECTION_NAME)
+    
+    collection.add(embeddings=embeddings.tolist(), documents=all_chunks, metadatas=all_metadata, ids=all_ids)
+    print("\n--- Success! Database rebuilt correctly. ---")
+    print(f"Total documents in collection '{COLLECTION_NAME}': {collection.count()}")
+
+if __name__ == '__main__':
+    main()
+#+end_src
+
+#+RESULTS: process_portfolio_the_real_fix
+: --- Deleting old database for a fresh start ---
+: Successfully created 116 chunks from your portfolio.
+: 
+: --- Success! Database rebuilt correctly. ---
+: Total documents in collection 'resume': 116
+
+
+After conducting an audit on the 116 chunks, I noticed that the accomplishment
+backlinks for each skill was not embedded, losing the context of where the
+skills were demonstrated. The following script will include this context:
+
+#+begin_src python :results output
+import os
+import re
+import shutil
+import chromadb
+from sentence_transformers import SentenceTransformer
+
+# --- Configuration ---
+PORTFOLIO_PATH = '.'
+CHROMA_PATH = 'resume_db'
+COLLECTION_NAME = 'resume'
+MODEL_NAME = 'all-MiniLM-L6-v2'
+
+def parse_org_file(content, file_path, file_type):
+    """
+    Parses an .org file for its main properties and content.
+    For skills, it captures the skill's own ID.
+    For employment, it captures all accomplishments and their linked skill IDs.
+    """
+    data = {'file_path': file_path, 'type': file_type}
+    
+    # Get the top-level properties under the first H1 heading
+    properties_match = re.search(r'^\* .*?\n:PROPERTIES:(.*?):END:', content, re.DOTALL)
+    if properties_match:
+        prop_content = properties_match.group(1)
+        for line in prop_content.splitlines():
+            match = re.match(r'^\s*:(\S+):\s+(.*)', line)
+            if match:
+                key = match.group(1).lower()
+                value = match.group(2).strip()
+                data[key] = value
+                if key == 'id':
+                    data['skill_id'] = value
+
+    # Get the summary for employment files
+    if file_type == 'employment':
+        summary_match = re.search(r':SUMMARY:\s+(.*?)(?:\n:END:|\Z)', content, re.DOTALL)
+        if summary_match:
+            data['summary'] = re.sub(r'\s+', ' ', summary_match.group(1)).strip()
+
+    # Get accomplishments and the skill IDs linked within them
+    if file_type == 'employment':
+        data['accomplishments'] = []
+        acc_pattern = re.compile(r'\*\*\* ACCOMPLISHMENT: (.*?)\n:PROPERTIES:(.*?):END:', re.DOTALL)
+        star_pattern = re.compile(r':(SITUATION|TASK|ACTION|RESULT|SKILLS):\s+(.*?)(?=\n:|\s*\*|$)', re.DOTALL)
+        skill_id_pattern = re.compile(r'\[\[id:(.*?)\]')
+
+        for acc_match in acc_pattern.finditer(content):
+            acc_obj = {'title': acc_match.group(1).strip(), 'linked_skill_ids': []}
+            properties_block = acc_match.group(2)
+            
+            for key, value in star_pattern.findall(properties_block):
+                key_lower = key.lower()
+                acc_obj[key_lower] = re.sub(r'\s+', ' ', value).strip()
+                if key_lower == 'skills':
+                    found_skill_ids = skill_id_pattern.findall(value)
+                    acc_obj['linked_skill_ids'].extend(found_skill_ids)
+            data['accomplishments'].append(acc_obj)
+            
+    return data
+
+def main():
+    """
+    Main function to parse files, build backlinks, create chunks, and populate the database.
+    """
+    if os.path.exists(CHROMA_PATH):
+        print("--- Deleting old database for a fresh start ---")
+        shutil.rmtree(CHROMA_PATH)
+
+    parsed_data_list = []
+    # --- PASS 1: PARSE ALL FILES ---
+    print("--- Pass 1: Parsing all portfolio files... ---")
+    for root, _, files in os.walk(PORTFOLIO_PATH):
+        if any(sub in root for sub in ['employment', 'skills']):
+            for file in files:
+                if file.endswith('.org') and not file.endswith('~') and not file.startswith('.#'):
+                    file_path = os.path.join(root, file)
+                    try:
+                        with open(file_path, 'r', encoding='utf-8') as f:
+                            content = f.read()
+                        
+                        file_type = 'skill' if 'skills' in root else 'employment'
+                        parsed_data = parse_org_file(content, file_path, file_type)
+                        if parsed_data:
+                            parsed_data_list.append(parsed_data)
+                    except Exception as e:
+                        print(f"  [X] Error processing {file_path}: {e}")
+    
+    # --- PASS 2: BUILD BACKLINK MAP ---
+    print("--- Pass 2: Building backlink map from accomplishments... ---")
+    skill_backlinks = {}
+    for data in parsed_data_list:
+        if data['type'] == 'employment':
+            company = data.get('company', 'N/A')
+            position = data.get('position', 'N/A')
+            for acc in data.get('accomplishments', []):
+                for skill_id in acc.get('linked_skill_ids', []):
+                    if skill_id not in skill_backlinks:
+                        skill_backlinks[skill_id] = []
+                    backlink_text = f"At {company} ({position}): {acc.get('title', 'Untitled Accomplishment')}"
+                    skill_backlinks[skill_id].append(backlink_text)
+
+    # --- PASS 3: CREATE CHUNKS AND METADATA ---
+    print("--- Pass 3: Generating final chunks for the database... ---")
+    all_chunks, all_metadata, all_ids = [], [], []
+
+    for data in parsed_data_list:
+        # Create chunks for employment
+        if data['type'] == 'employment':
+            company = data.get('company', 'N/A')
+            position = data.get('position', 'N/A')
+            if data.get('summary'):
+                all_chunks.append(f"Job Title: {position} at {company}. Summary: {data.get('summary')}")
+                all_metadata.append({'source': data['file_path'], 'type': 'Job Summary', 'company': company, 'position': position})
+                all_ids.append(f"{data['file_path']}-summary")
+            
+            for i, acc in enumerate(data.get('accomplishments', [])):
+                chunk_text = f"At {company} as a {position}, I achieved the following: {acc.get('title')}. Situation: {acc.get('situation', 'N/A')}. Task: {acc.get('task', 'N/A')}. Action: {acc.get('action', 'N/A')}. Result: {acc.get('result', 'N/A')}."
+                all_chunks.append(chunk_text)
+                all_metadata.append({'source': data['file_path'], 'type': 'Accomplishment', 'title': acc.get('title'), 'company': company, 'position': position})
+                all_ids.append(f"{data['file_path']}-acc-{i}")
+
+        # Create chunks for skills, now with backlinks
+        elif data['type'] == 'skill' and data.get('skill_name'):
+            skill_id = data.get('skill_id')
+            base_chunk_text = f"Skill: {data.get('skill_name')}. Category: {data.get('category')}. Proficiency: {data.get('proficiency')}. Keywords: {data.get('ats_keywords')}."
+            
+            # Check for and add backlinks
+            if skill_id in skill_backlinks:
+                examples = "; ".join(skill_backlinks[skill_id])
+                backlink_chunk_text = f" This skill was applied in the following accomplishments: {examples}."
+                final_chunk_text = base_chunk_text + backlink_chunk_text
+            else:
+                final_chunk_text = base_chunk_text
+
+            all_chunks.append(final_chunk_text)
+            all_metadata.append({'source': data['file_path'], 'type': 'Skill'})
+            all_ids.append(f"{data['file_path']}-skill")
+
+    if not all_chunks:
+        print("No chunks were created. Please check file paths and parsing logic.")
+        return
+
+    # --- DATABASE INGESTION ---
+    print(f"\n--- Storing {len(all_chunks)} enriched chunks in the database... ---")
+    model = SentenceTransformer(MODEL_NAME)
+    embeddings = model.encode(all_chunks, show_progress_bar=True)
+    
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    collection = client.get_or_create_collection(name=COLLECTION_NAME)
+    
+    collection.add(embeddings=embeddings.tolist(), documents=all_chunks, metadatas=all_metadata, ids=all_ids)
+    print("\n--- Success! Database rebuilt with backlinked skill data. ---")
+    print(f"Total documents in collection '{COLLECTION_NAME}': {collection.count()}")
+
+if __name__ == '__main__':
+    main()
+#+end_src
+
+#+RESULTS:
+: --- Deleting old database for a fresh start ---
+: --- Pass 1: Parsing all portfolio files... ---
+: --- Pass 2: Building backlink map from accomplishments... ---
+: --- Pass 3: Generating final chunks for the database... ---
+: 
+: --- Storing 90 enriched chunks in the database... ---
+: 
+: --- Success! Database rebuilt with backlinked skill data. ---
+: Total documents in collection 'resume': 90

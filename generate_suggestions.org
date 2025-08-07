@@ -1,0 +1,188 @@
+* The Proof-of-Concept Script
+
+1. Install Ollama:
+curl -fsSL https://ollama.com/install.sh | sh
+
+2. Download a Model:
+ollama pull llama3
+
+3. Install the Python Library:
+pip install ollama
+
+4. The generate_suggestions.org Block
+
+This script will query your existing database and then talk to your local Llama
+3 model.
+
+#+name: generate_suggestions
+#+begin_src python :results output
+import os
+import chromadb
+import ollama
+from sentence_transformers import SentenceTransformer
+
+# --- Configuration ---
+CHROMA_PATH = 'resume_db'
+COLLECTION_NAME = 'resume'
+MODEL_NAME = 'all-MiniLM-L6-v2'
+LLM_MODEL = 'llama3' # The model we'll use from Ollama
+
+# --- Job Description (Our Goal) ---
+# We'll use a sample job description for a "Revenue Operations Analyst"
+job_description = """
+About the job
+Lucid Software is the leader in visual collaboration and work acceleration, helping teams see and build the future by turning ideas into reality. Our products include the Visual Collaboration Suite (Lucidchart and Lucidspark) and airfocus. We hold true to our core values: innovation in everything we do, passion & excellence in every area, individual empowerment, initiative and ownership, and teamwork over ego. At Lucid, we value diverse perspectives and are dedicated to creating an environment and culture that is respectful and inclusive for everyone. Lucid is a hybrid workplace. We promote a healthy work-life balance by allowing employees to work remotely, from one of our offices, or a combination of the two depending on the needs of the role and team.
+
+Since the company’s founding, Lucid Software has received numerous global and regional recognitions for its products, business, and workplace culture. These include being listed to the Forbes Cloud 100, Fast Company Most Innovative Companies, Fortune Best Workplaces in Technology, and PEOPLE’s Companies that Care. Lucid’s solutions are used by more than 100 million users across the globe, making Lucid the most used visual collaboration platform by the Fortune 500. Our customers include Google, GE, and NBC Universal, and we partner with leaders such as Google, Atlassian, and Microsoft.
+
+We are looking for a smart, energetic, passionate, and organized individual to join the Go-to-Market Operations team. This role will support the go-to-market teams in the administration and execution of compensation plans and ensuring that monthly and quarterly compensation amounts are complete and accurate. This role will act as a partner to Revenue Operations, People Operations, Accounting, and FP&A teams to ensure total alignment and compliance with internal controls and processes. As a Revenue Operations Analyst, you will develop a deep understanding of Lucid’s internal systems (both technical and non technical), analyze data, and find ways to improve processes. An ideal candidate will have a love of technology, collaborate well in a team environment, and have a desire to work in a role that is continuously evolving as our organization grows.
+
+Responsibilities
+
+Administration and validation of go-to-market compensation plans in commissions software, ensuring compensation data and plans are up-to-date
+Preparing monthly and quarterly go-to-market commissions that are complete, accurate, and timely for monthly accruals and payroll submission
+Ensuring commission approval flows, internal controls, and key processes are followed and documented thoroughly
+Participating in the monthly close process and external audit by providing commission accruals, analysis, reporting, and support 
+Serving as the point of contact for compensation and commission-related inquiries for go-to-market teams, including reporting and analysis on compensation plans and commissions
+Improving and implementing new systems and processes that optimize commissions efficiency and user experience
+Facilitating total alignment and process compliance between Go-to-Market Operations, Revenue Operations, People Operations, Accounting, and FP&A teams
+Maintaining highest degree of integrity and confidentiality
+
+Requirements
+
+BA/BS degree, accounting or finance degree a plus
+2-3 years experience in payroll, accounting, compensation, or a similar role
+Able to thrive in a fast-paced, rapid growth environment
+Able to work efficiently in Microsoft Excel (e.g. lookups, pivot tables, complex formulas)
+Strong verbal and written communication skills with good interpersonal skills to build relationships with key stakeholders
+Detail-oriented and organized to ensure work is complete, accurate, and timely
+Have a track record of being able to work independently, collaboratively, and on multiple initiatives at the same time with a demonstrable record of driving results
+Able to identify problems as well as propose and implement creative data-driven solutions
+Resourceful, innovative, and are always looking for ways to drive process improvement and act as an agent for change
+
+Preferred Qualifications
+
+Undergraduate degree in Business, Finance, IS, Marketing, Economics, Math, Statistics, or other technical degree with strong academic performance
+Experience with Salesforce, Spiff, Tableau, and SQL a plus but not required
+Passion for working with emerging technologies and an ability to understand new technical concepts
+Experience using AI to improve workflows or processes
+"""
+
+# --- 1. Query the Vector Database ---
+def query_resume_db(query, n_results=5):
+    """Queries the ChromaDB for relevant resume chunks."""
+    print("--- 1. Initializing DB and Embedding Model ---")
+    client = chromadb.PersistentClient(path=CHROMA_PATH)
+    collection = client.get_collection(name=COLLECTION_NAME)
+    model = SentenceTransformer(MODEL_NAME)
+
+    print(f"--- 2. Searching for top {n_results} resume chunks relevant to the job description ---")
+    # We don't need to re-embed the query text for ChromaDB with SentenceTransformers
+    results = collection.query(
+        query_texts=[query],
+        n_results=n_results
+    )
+    
+    # The documents are in results['documents'][0]
+    return results['documents'][0]
+
+# --- 2. Construct the Prompt and Generate Response ---
+def generate_tailored_suggestions(context, query):
+    """Constructs a prompt and gets suggestions from the local LLM."""
+    print("--- 3. Constructing prompt for the LLM ---")
+    
+    # The system prompt sets the persona and rules for the LLM
+    system_prompt = """
+    You are an expert career coach and resume writer. Your task is to help me tailor my resume
+    for a specific job. I will provide you with a job description and several relevant chunks
+    from my resume.
+
+    Your response MUST follow these rules:
+    1.  Analyze the provided job description to identify the key skills and responsibilities.
+    2.  Review ONLY the provided resume chunks. Do not invent or assume any other experience.
+    3.  Provide 3-5 specific, actionable bullet-point suggestions for how I can highlight or rephrase my experience from the provided chunks to better match the job description.
+    4.  For each suggestion, briefly explain WHY it's a good change, referencing both the job description and the resume chunk.
+    """
+    
+    # The user prompt combines the retrieved context with the query
+    formatted_context = "\n\n---\n\n".join(context)
+    user_prompt = f"""
+    Here is the job description I am targeting:
+    --- JOB DESCRIPTION ---
+    {query}
+
+    --- MY RELEVANT EXPERIENCE ---
+    {formatted_context}
+    """
+
+    print("--- 4. Sending request to the local LLM. This might take a moment... ---")
+    try:
+        response = ollama.chat(
+            model=LLM_MODEL,
+            messages=[
+                {'role': 'system', 'content': system_prompt},
+                {'role': 'user', 'content': user_prompt},
+            ]
+        )
+        return response['message']['content']
+    except Exception as e:
+        return f"An error occurred while communicating with the Ollama model: {e}"
+
+
+# --- Main Execution ---
+if __name__ == '__main__':
+    # Make sure the Ollama server is running in a separate terminal: `ollama serve`
+    print("Starting the resume tailoring process...")
+    
+    retrieved_chunks = query_resume_db(job_description)
+    
+    print("\n--- Retrieved Resume Chunks: ---")
+    for i, chunk in enumerate(retrieved_chunks):
+        print(f"  {i+1}. {chunk[:100]}...")
+    print("\n")
+    
+    final_suggestions = generate_tailored_suggestions(retrieved_chunks, job_description)
+    
+    print("\n\n--- LLM-Generated Resume Suggestions ---")
+    print(final_suggestions)
+
+#+end_src
+
+#+RESULTS: generate_suggestions
+#+begin_example
+Starting the resume tailoring process...
+--- 1. Initializing DB and Embedding Model ---
+--- 2. Searching for top 5 resume chunks relevant to the job description ---
+
+
+
+--- 3. Constructing prompt for the LLM ---
+--- 4. Sending request to the local LLM. This might take a moment... ---
+
+
+--- LLM-Generated Resume Suggestions ---
+Based on the job description, I've identified key skills and responsibilities. To highlight your experience in a way that matches the job requirements, here are three suggestions:
+
+1. Emphasize your analytical and problem-solving skills:
+From the provided chunks, you can rephrase your National-Level System Troubleshooting experience to focus on your ability to analyze complex system errors, engineer workarounds, and document best practices. You can highlight how this skill can be applied to the Revenue Operations Analyst role, where you'll need to develop a deep understanding of internal systems, analyze data, and find ways to improve processes.
+
+Example: "Utilized analytical skills to identify and troubleshoot systemic integration errors, developing workarounds and documenting best practices for national-level knowledge sharing. This experience has prepared me to analyze complex compensation plans and commissions, finding ways to improve processes and ensure accuracy."
+
+Why it's a good change: The job description emphasizes the importance of analyzing data and improving processes. By rephrasing your experience in this way, you're highlighting your ability to apply analytical skills to solve complex problems.
+
+2. Highlight your proficiency in specific software and tools:
+As the job requires proficiency in Microsoft Excel (e.g., lookups, pivot tables, complex formulas), you can emphasize your Intermediate-level proficiency in BI & Dashboarding, which includes experience with Tableau and Power BI. You can also mention your Master-level proficiency in Specific Software & Tools, including Microsoft Teams.
+
+Example: "Proficient in Microsoft Excel, with experience creating complex formulas, lookups, and pivot tables. Additionally, I have intermediate-level proficiency in BI & Dashboarding tools like Tableau and Power BI, which will enable me to analyze compensation data and create insightful reports."
+
+Why it's a good change: The job description requires strong proficiency in Microsoft Excel, as well as experience with specific software and tools. By highlighting your relevant skills and proficiencies, you're demonstrating your ability to work efficiently with these tools.
+
+3. Emphasize your experience with external stakeholder management:
+Although the job doesn't specifically require external stakeholder management, it's an important aspect of the role. You can rephrase your External Stakeholder Management skill to focus on your ability to build relationships and communicate effectively with key stakeholders.
+
+Example: "Utilized strong verbal and written communication skills to build relationships with key stakeholders, including vendors, partners, and clients. This experience has prepared me to serve as a point of contact for compensation and commission-related inquiries, providing timely and accurate reporting and analysis."
+
+Why it's a good change: The job description emphasizes the importance of building relationships and communicating effectively with key stakeholders. By rephrasing your experience in this way, you're highlighting your ability to work collaboratively and build strong relationships.
+
+Remember to tailor your bullet points to specific job requirements and highlight your relevant skills and experiences in a way that demonstrates your fit for the role.
+#+end_example

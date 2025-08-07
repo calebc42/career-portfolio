@@ -1,0 +1,1143 @@
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+# --- SETUP: Ensure you have run these commands in your activated venv ---
+# pip install sentence-transformers scikit-learn
+
+import os
+import re
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# --- 1. DATA PARSING FUNCTION ---
+
+def parse_accomplishments(directory_path):
+    """
+    Parses all .org files in a directory to extract accomplishments.
+    An accomplishment is a dictionary containing its title and full STAR text.
+    """
+    accomplishments = []
+    accomplishment_start_regex = re.compile(r'^\*{3}\s+ACCOMPLISHMENT:\s*(.*)')
+    star_regex = re.compile(r'^\s*:(SITUATION|TASK|ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+
+    for root, _, files in os.walk(directory_path):
+        for file in files:
+            # Skip temporary Emacs files
+            if file.endswith(".org") and not file.startswith(".#"):
+                file_path = os.path.join(root, file)
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.readlines()
+
+                current_accomplishment = None
+                for line in content:
+                    match_start = accomplishment_start_regex.match(line)
+                    if match_start:
+                        if current_accomplishment:
+                            accomplishments.append(current_accomplishment)
+                        current_accomplishment = {
+                            "title": match_start.group(1).strip(),
+                            "text": "",
+                            "source": os.path.basename(file_path)
+                        }
+                        continue
+
+                    if current_accomplishment:
+                        match_star = star_regex.match(line)
+                        if match_star:
+                            current_accomplishment["text"] += match_star.group(2).strip() + ". "
+                            continue
+                
+                if current_accomplishment:
+                    accomplishments.append(current_accomplishment)
+
+    return accomplishments
+
+# --- 2. THE MAIN ANALYSIS SCRIPT ---
+
+def analyze_relevance(job_description, accomplishments, model, top_n=5):
+    """
+    Analyzes a job description against a list of accomplishments and returns the most relevant.
+    """
+    if not accomplishments:
+        print("No accomplishments found to analyze.")
+        return
+
+    # Create semantic fingerprints (embeddings) for all accomplishments
+    accomplishment_texts = [acc["text"] for acc in accomplishments]
+    accomplishment_embeddings = model.encode(accomplishment_texts, show_progress_bar=False)
+
+    # Create a semantic fingerprint for the job description
+    job_embedding = model.encode([job_description], show_progress_bar=False)
+
+    # Calculate similarity scores
+    similarities = cosine_similarity(job_embedding, accomplishment_embeddings)[0]
+
+    # Get the indices of the top N most similar accomplishments
+    top_indices = np.argsort(similarities)[-top_n:][::-1]
+
+    # --- Generate the report ---
+    print("--- Semantic Relevance Report ---")
+    print(f"\nTop {top_n} Most Relevant Accomplishments:\n")
+
+    for i, index in enumerate(top_indices):
+        acc = accomplishments[index]
+        score = similarities[index]
+        print(f"{i+1}. {acc['title']} (from {acc['source']})")
+        print(f"   Relevance Score: {score:.2f}")
+        print("-" * 40)
+
+# --- 3. EXECUTION ---
+
+# Set the path to your data directory
+my_employment_path = '~/projects/career-portfolio/data/employment'
+absolute_employment_path = os.path.expanduser(my_employment_path)
+
+# --- PASTE THE JOB DESCRIPTION TO ANALYZE HERE ---
+job_to_analyze = """
+This exciting opportunity will support a differentiated business as it is established as a new independent medical device company, enableCV is a subsidiary of Edwards LifeSciences. EnableCV is based in Midvale, UT and this role will be located on site at the enableCV headquarters. This is a flexible on-site role which will thrive in a collaborative, start up like environment. We are a small tight-knit group of go getters that are willing to wear multiple hats, learn quickly, and be flexible in order to grow and develop this business. If you have the qualifications, want to work hard, and have a great time doing it, please apply. 
+
+This position is an analytical role that will assist in the development and execution of compensation plans, territory analysis and alignments, forecast preparation, and report and presentation generation. This role interacts with sales management and internal and external sales reps and is instrumental in ensuring accurate compensation calculations and compensation documents.
+
+Essential Job Functions
+Prepares, updates, and ensures accuracy of the enableCV variable compensation plans. Ensures monthly, quarterly, and annual milestones are computed accurately. Generates compensation statements for distribution to the Sales Team, Clinicals, and Management. Processes compensation through payroll and accounts payable where appropriate. Prepares monthly Rankings for enableCV Reps and Independent Sales Reps to support semi-annual and annual compensation awards, if any.
+Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models and strategic plans to determine best course of action. Prepares presentations for a wide range of audiences.
+Assists in the preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts, and maintains product limit program. Uploads data into enableCV’s financial systems where needed.
+Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats to assist sales team and management in meeting key objectives. Develops ad hoc reports for sales and management.
+Assist in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, status and maintenance and other incidental duties
+
+Education/Experience:
+Bachelors' degree, or equivalent experience and comprehensive knowledge and expertise in sales operations, statistics, economics, or related field is preferred 
+A minimum of 3-5 years sales operations, business strategy and/or financial planning experience required
+Previous compensation plan modeling experience a plus!
+Working with large amounts of data a must 
+Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus), PowerPoint, Word, and Access
+Hands on intermediate knowledge of MS Access or SQL a definite plus
+Creative out of the box thinker who is intellectually curious.
+Sound decision making capabilities and the ability to articulate ideas effectively
+Establish foundation of credibility based on integrity and a track record of achievement in delivering on large and/or multiple projects and influencing business outcomes.
+Ability to develop strong relationships with internal customers, sales partners, and independent sales reps.
+Can be counted on to achieve goals and is both top and bottom-line oriented.
+Strong individual contributor.
+Ability to routinely work on multiple tasks with multiple deadlines.
+Highly analytical and detail oriented. Good organizational skills and ability to meet tight deadlines in an environment of competing priorities
+Excellent interpersonal, communication and negotiation skills for a wide variety of audiences, including sales & marketing leadership.
+"""
+
+# Load the pre-trained AI model.
+print("Loading AI model...")
+model = SentenceTransformer('all-MiniLM-L6-v2') 
+print("Model loaded.\n")
+
+# Parse all accomplishment data from your .org files
+all_accomplishments = parse_accomplishments(absolute_employment_path)
+
+# Run the analysis
+analyze_relevance(job_to_analyze, all_accomplishments, model)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading AI model...
+Model loaded.
+
+--- Semantic Relevance Report ---
+
+Top 5 Most Relevant Accomplishments:
+
+1. Leadership Recognition and Promotion (from shift_lead.org)
+   Relevance Score: 0.40
+----------------------------------------
+2. Process Documentation and Knowledge Transfer (from traditional_lending_subject_matter_expert_sme.org)
+   Relevance Score: 0.39
+----------------------------------------
+3. Performance-Based Transition to Full-Time (from sba_ppp_loan_forgiveness_agent.org)
+   Relevance Score: 0.37
+----------------------------------------
+4. Corporate Training and Onboarding (from integration_specialist.org)
+   Relevance Score: 0.34
+----------------------------------------
+5. Commitment to Professional Development (from sales_representative.org)
+   Relevance Score: 0.34
+----------------------------------------
+#+end_example
+
+Poor results, going to debug
+
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+# --- SETUP: Ensure you have run these commands in your activated venv ---
+# pip install sentence-transformers scikit-learn
+
+import os
+import re
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# --- 1. DATA PARSING FUNCTION ---
+
+def parse_accomplishments(directory_path):
+  """
+  Parses all .org files in a directory to extract accomplishments.
+  An accomplishment is a dictionary containing its title and full STAR text.
+  """
+  accomplishments = []
+  accomplishment_start_regex = re.compile(r'^\*{3}\s+ACCOMPLISHMENT:\s*(.*)')
+  star_regex = re.compile(r'^\s*:(SITUATION|TASK|ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+
+  for root, _, files in os.walk(directory_path):
+      for file in files:
+          # Skip temporary Emacs files
+          if file.endswith(".org") and not file.startswith(".#"):
+              file_path = os.path.join(root, file)
+              with open(file_path, 'r', encoding='utf-8') as f:
+                  content = f.readlines()
+
+              current_accomplishment = None
+              for line in content:
+                  match_start = accomplishment_start_regex.match(line)
+                  if match_start:
+                      if current_accomplishment:
+                          accomplishments.append(current_accomplishment)
+                      current_accomplishment = {
+                          "title": match_start.group(1).strip(),
+                          "text": "",
+                          "source": os.path.basename(file_path)
+                      }
+                      continue
+
+                  if current_accomplishment:
+                      match_star = star_regex.match(line)
+                      if match_star:
+                          current_accomplishment["text"] += match_star.group(2).strip() + ". "
+                          continue
+
+              if current_accomplishment:
+                  accomplishments.append(current_accomplishment)
+
+  return accomplishments
+
+# --- 2. THE MAIN ANALYSIS SCRIPT ---
+
+def analyze_relevance(job_description, accomplishments, model, top_n=5):
+  """
+  Analyzes a job description against a list of accomplishments and returns the most relevant.
+  """
+  if not accomplishments:
+      print("No accomplishments found to analyze.")
+      return
+
+  # Create semantic fingerprints (embeddings) for all accomplishments
+  accomplishment_texts = [acc["text"] for acc in accomplishments]
+  accomplishment_embeddings = model.encode(accomplishment_texts, show_progress_bar=False)
+
+  # Create a semantic fingerprint for the job description
+  job_embedding = model.encode([job_description], show_progress_bar=False)
+
+  # Calculate similarity scores
+  similarities = cosine_similarity(job_embedding, accomplishment_embeddings)[0]
+
+  # Get the indices of the top N most similar accomplishments
+  top_indices = np.argsort(similarities)[-top_n:][::-1]
+
+  # --- Generate the report ---
+  print("--- Semantic Relevance Report ---")
+  print(f"\nTop {top_n} Most Relevant Accomplishments:\n")
+
+  for i, index in enumerate(top_indices):
+      acc = accomplishments[index]
+      score = similarities[index]
+      print(f"{i+1}. {acc['title']} (from {acc['source']})")
+      print(f"   Relevance Score: {score:.2f}")
+      print("-" * 40)
+
+# --- 3. EXECUTION ---
+
+# Set the path to your data directory
+my_employment_path = '~/projects/career-portfolio/data/employment'
+absolute_employment_path = os.path.expanduser(my_employment_path)
+
+# --- PASTE THE JOB DESCRIPTION TO ANALYZE HERE ---
+job_to_analyze = """
+Prepares, updates, and ensures accuracy of variable compensation plans. Computes monthly, quarterly, and annual milestones accurately. Generates compensation statements. Processes compensation through payroll and accounts payable. Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models and strategic plans. Prepares presentations. Assists in preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts, and maintains product limit program. Uploads data into financial systems. Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats. Develops ad hoc reports. Assists in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, and status.
+Requires bachelors' degree, 3-5 years sales operations, business strategy and/or financial planning experience. Previous compensation plan modeling experience a plus. Experience working with large amounts of data. Strong technical skills including ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus). MS Access or SQL a definite plus. Highly analytical and detail oriented.
+"""
+
+# Load the pre-trained AI model.
+print("Loading AI model...")
+model = SentenceTransformer('all-MiniLM-L6-v2') 
+print("Model loaded.\n")
+
+# Parse all accomplishment data from your .org files
+all_accomplishments = parse_accomplishments(absolute_employment_path)
+
+# --- DEBUGGING STEP ---
+# Let's print the first accomplishment's text to see what it looks like
+if all_accomplishments:
+  print("--- DEBUG: Sample Accomplishment Text ---")
+  print(all_accomplishments[0]["text"])
+  print("-" * 40 + "\n")
+# --------------------
+
+# Run the analysis
+analyze_relevance(job_to_analyze, all_accomplishments, model)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading AI model...
+Model loaded.
+
+--- DEBUG: Sample Accomplishment Text ---
+In the fast-paced, high-volume environment of a Five Guys kitchen, maintaining both speed and accuracy was critical to customer satisfaction.. To consistently ensure that all customer orders were prepared accurately and delivered in a timely manner, meeting the high standards of the company.. Diligently followed all procedures for order taking, food preparation, and final quality checks to minimize errors and maximize efficiency during peak hours.. Maintained high standards of order accuracy and timeliness, contributing to a positive customer experience and the efficient operation of the restaurant.. 
+----------------------------------------
+
+--- Semantic Relevance Report ---
+
+Top 5 Most Relevant Accomplishments:
+
+1. Corporate Training and Onboarding (from integration_specialist.org)
+   Relevance Score: 0.44
+----------------------------------------
+2. Personal Goal Setting and Quota Attainment (from sales_representative.org)
+   Relevance Score: 0.44
+----------------------------------------
+3. Performance Management System Design (from go_to_market_sales_manager.org)
+   Relevance Score: 0.44
+----------------------------------------
+4. Process Documentation and Knowledge Transfer (from traditional_lending_subject_matter_expert_sme.org)
+   Relevance Score: 0.42
+----------------------------------------
+5. Commitment to Professional Development (from sales_representative.org)
+   Relevance Score: 0.41
+----------------------------------------
+#+end_example
+
+This is a fantastic result. You've successfully narrowed the focus, and now the scores are starting to differentiate, even if they're still low. The fact that "Performance Management System Design" is now in the top 3 is a huge win—it's a sign we're on the right track.
+
+However, you're right to be critical. A score of 0.44 is still weak, and the top results are a strange mix. "Corporate Training" and "Personal Goal Setting" are likely appearing because they have generic business language that weakly matches the generic language in the job description.
+
+This is the classic next step in debugging a semantic system. We've improved the "signal" by focusing the data, but now we need to make the signal itself cleaner.
+
+The problem lies in what we're asking the model to compare.
+
+Your Accomplishment Vector: Right now, you're creating one vector for the entire S.T.A.R. story. That vector represents the average meaning of the situation, the task, the action, and the result combined.
+
+Your Job Description Vector: You're creating one vector for a large paragraph of job duties. That vector represents the average meaning of all those duties combined.
+
+The model finds a weak match because the "average" of your accomplishment is only slightly similar to the "average" of the job description. The key, powerful phrases are being diluted.
+
+The Next Evolution: From Paragraphs to Key Points
+Let's refine our approach. The most impactful part of your accomplishment is what you did and what the result was. The Situation and Task are just context.
+
+Question: What if we only created the vector from the "Action" and "Result" text?
+
+This would create a much more potent, focused "fingerprint" of your achievement.
+
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+import os
+import re
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# --- 1. DATA PARSING FUNCTION ---
+def parse_accomplishments_from_file(file_path):
+    """Parses a single .org file to extract accomplishments."""
+    accomplishments = []
+    accomplishment_start_regex = re.compile(r'^\*{3}\s+ACCOMPLISHMENT:\s*(.*)')
+    star_regex = re.compile(r'^\s*:(SITUATION|TASK|ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+
+    if not os.path.isfile(file_path):
+        print(f"Warning: File not found, skipping: {file_path}")
+        return accomplishments
+
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.readlines()
+
+    current_accomplishment = None
+    for line in content:
+        match_start = accomplishment_start_regex.match(line)
+        if match_start:
+            if current_accomplishment and current_accomplishment.get("text"):
+                accomplishments.append(current_accomplishment)
+            current_accomplishment = {
+                "title": match_start.group(1).strip(),
+                "text": "",
+                "source": os.path.basename(file_path)
+            }
+            continue
+
+        if current_accomplishment:
+            match_star = star_regex.match(line)
+            if match_star:
+                star_part = match_star.group(1).upper()
+                star_text = match_star.group(2).strip() + ". "
+                if star_part in ["ACTION", "RESULT"]:
+                    current_accomplishment["text"] += star_text
+                continue
+    
+    if current_accomplishment and current_accomplishment.get("text"):
+        accomplishments.append(current_accomplishment)
+        
+    return accomplishments
+
+# --- 2. THE MAIN ANALYSIS SCRIPT ---
+def analyze_relevance_by_concept(job_concepts_dict, accomplishments, model, top_n=3):
+    if not accomplishments:
+        print("No accomplishments found to analyze.")
+        return
+
+    accomplishment_texts = [acc["text"] for acc in accomplishments]
+    accomplishment_embeddings = model.encode(accomplishment_texts, show_progress_bar=False)
+
+    print("--- Semantic Relevance Report by Job Concept ---")
+    for concept, description in job_concepts_dict.items():
+        print(f"\n--- Concept: {concept} ---\n")
+        job_embedding = model.encode([description], show_progress_bar=False)
+        similarities = cosine_similarity(job_embedding, accomplishment_embeddings)[0]
+        top_indices = np.argsort(similarities)[-top_n:][::-1]
+        
+        found_match = False
+        for i, index in enumerate(top_indices):
+            acc = accomplishments[index]
+            score = similarities[index]
+            if score > 0.45:
+                print(f"  {i+1}. {acc['title']} (from {acc['source']})")
+                print(f"     Relevance Score: {score:.2f}")
+                print("-" * 45)
+                found_match = True
+        
+        if not found_match:
+            print("  No strong matches found for this concept.")
+
+# --- 3. EXECUTION ---
+# CORRECTED: Ensure these filenames are EXACTLY what `ls` shows you
+relevant_job_files = [
+    '~/Coppermind/roam/career-portfolio/employment/go_to_market_sales_manager.org', # Corrected filename
+    '~/Coppermind/roam/career-portfolio/employment/traditional_lending_subject_matter_expert_sme.org',
+    '~/Coppermind/roam/career-portfolio/employment/commercial_loan_officer.org',
+    '~/Coppermind/roam/career-portfolio/employment/business_relationship_manager.org'
+]
+absolute_job_files = [os.path.expanduser(p) for p in relevant_job_files]
+
+job_concepts = {
+    "Compensation & Financial Planning": "Prepares, updates, and ensures accuracy of variable compensation plans. Computes monthly, quarterly, and annual milestones accurately. Generates compensation statements. Processes compensation through payroll. Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models. Previous compensation plan modeling experience a plus.",
+    "Forecasting & Data Analysis": "Assists in preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts. Working with large amounts of data. Highly analytical and detail oriented.",
+    "BI & Salesforce Reporting": "Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats. Develops ad hoc reports. Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus). MS Access or SQL a definite plus.",
+    "Sales Operations & Process": "Assists in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, and status. 3-5 years sales operations, business strategy and/or financial planning experience required."
+}
+
+print("Loading AI model...")
+model = SentenceTransformer('all-MiniLM-L6-v2')
+print("Model loaded.\n")
+
+all_accomplishments = []
+for file_path in absolute_job_files:
+    print(f"Parsing accomplishments from: {file_path}")
+    all_accomplishments.extend(parse_accomplishments_from_file(file_path))
+
+print(f"\nFound a total of {len(all_accomplishments)} relevant accomplishments to analyze.\n")
+
+analyze_relevance_by_concept(job_concepts, all_accomplishments, model)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading AI model...
+Model loaded.
+
+Parsing accomplishments from: /home/caleb/Coppermind/roam/career-portfolio/employment/go_to_market_sales_manager.org
+Parsing accomplishments from: /home/caleb/Coppermind/roam/career-portfolio/employment/traditional_lending_subject_matter_expert_sme.org
+Parsing accomplishments from: /home/caleb/Coppermind/roam/career-portfolio/employment/commercial_loan_officer.org
+Parsing accomplishments from: /home/caleb/Coppermind/roam/career-portfolio/employment/business_relationship_manager.org
+
+Found a total of 41 relevant accomplishments to analyze.
+
+--- Semantic Relevance Report by Job Concept ---
+
+--- Concept: Compensation & Financial Planning ---
+
+  No strong matches found for this concept.
+
+--- Concept: Forecasting & Data Analysis ---
+
+  No strong matches found for this concept.
+
+--- Concept: BI & Salesforce Reporting ---
+
+  No strong matches found for this concept.
+
+--- Concept: Sales Operations & Process ---
+
+  1. Top Team Performance and Promotion Opportunity (from traditional_lending_subject_matter_expert_sme.org)
+     Relevance Score: 0.51
+---------------------------------------------
+  2. Channel Partner Development (from business_relationship_manager.org)
+     Relevance Score: 0.50
+---------------------------------------------
+  3. Autonomous Performance (from commercial_loan_officer.org)
+     Relevance Score: 0.50
+---------------------------------------------
+#+end_example
+
+script is working flawlessly from a technical perspective. The issue isn't in the code; it's in the subtlety of the data.
+
+Look at the concepts where it found "No strong matches":
+
+Compensation & Financial Planning
+
+Forecasting & Data Analysis
+
+BI & Salesforce Reporting
+
+Now, look at your strongest accomplishment for "BI & Salesforce Reporting," which is likely the "Performance Management System Design" from your GTM Sales Manager role. The text of that accomplishment is: "Built the team's entire performance management system in Google Sheets, using the Salesforce Connector to pull in data... Created dashboards to track KPIs..."
+
+To a human, this is a perfect match. But to the AI model, the language is just different enough to miss the connection. The job description says "SFDC, Tableau, BI," while your accomplishment says "Google Sheets, Salesforce Connector, dashboards." The model is getting hung up on the specific tool names instead of recognizing the underlying concept of building a BI dashboard.
+
+We have successfully refined the script to the point where it's a perfect tool,
+but we're feeding it slightly the wrong "fuel."
+
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+import os
+import re
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# --- 1. NEW: SKILL PARSING FUNCTION ---
+def parse_skills(skills_directory):
+    """
+    Parses all .org files in the skills directory to create a map
+    from skill ID to skill name.
+    """
+    skill_map = {}
+    id_regex = re.compile(r'^\s*:ID:\s*(.*)', re.IGNORECASE)
+    name_regex = re.compile(r'^\s*:SKILL_NAME:\s*(.*)', re.IGNORECASE)
+
+    for root, _, files in os.walk(skills_directory):
+        for file in files:
+            if file.endswith(".org") and not file.startswith(".#"):
+                file_path = os.path.join(root, file)
+                current_id = None
+                current_name = None
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    for line in f:
+                        id_match = id_regex.match(line)
+                        if id_match:
+                            current_id = id_match.group(1).strip()
+                        name_match = name_regex.match(line)
+                        if name_match:
+                            current_name = name_match.group(1).strip()
+                        if current_id and current_name:
+                            skill_map[current_id] = current_name
+                            break # Move to next file
+    return skill_map
+
+# --- 2. UPDATED: ACCOMPLISHMENT PARSING FUNCTION ---
+def parse_accomplishments_from_file(file_path):
+    """
+    Parses a single .org file to extract accomplishments,
+    including their associated skill IDs.
+    """
+    accomplishments = []
+    accomplishment_start_regex = re.compile(r'^\*{3}\s+ACCOMPLISHMENT:\s*(.*)')
+    star_regex = re.compile(r'^\s*:(SITUATION|TASK|ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+    skills_regex = re.compile(r'^\s*:SKILLS:\s*(.*)', re.IGNORECASE)
+    skill_id_regex = re.compile(r'\[\[id:([\w-]+)\]\]')
+
+    if not os.path.isfile(file_path):
+        print(f"Warning: File not found, skipping: {file_path}")
+        return accomplishments
+
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.readlines()
+
+    current_accomplishment = None
+    for line in content:
+        match_start = accomplishment_start_regex.match(line)
+        if match_start:
+            if current_accomplishment and current_accomplishment.get("text"):
+                accomplishments.append(current_accomplishment)
+            current_accomplishment = {
+                "title": match_start.group(1).strip(),
+                "text": "",
+                "skill_ids": [],
+                "source": os.path.basename(file_path)
+            }
+            continue
+
+        if current_accomplishment is not None:
+            skills_match = skills_regex.match(line)
+            if skills_match:
+                skill_line = skills_match.group(1)
+                ids = skill_id_regex.findall(skill_line)
+                current_accomplishment["skill_ids"].extend(ids)
+
+            match_star = star_regex.match(line)
+            if match_star:
+                star_part = match_star.group(1).upper()
+                star_text = match_star.group(2).strip() + ". "
+                if star_part in ["ACTION", "RESULT"]:
+                    current_accomplishment["text"] += star_text
+    
+    if current_accomplishment and current_accomplishment.get("text"):
+        accomplishments.append(current_accomplishment)
+        
+    return accomplishments
+
+# --- 3. THE MAIN ANALYSIS SCRIPT ---
+def analyze_relevance_by_concept(job_concepts_dict, accomplishments, model, top_n=3):
+    if not accomplishments:
+        print("No accomplishments found to analyze.")
+        return
+
+    # Use the 'enriched_text' for the analysis
+    accomplishment_texts = [acc["enriched_text"] for acc in accomplishments]
+    accomplishment_embeddings = model.encode(accomplishment_texts, show_progress_bar=True)
+
+    print("\n--- Semantic Relevance Report by Job Concept ---")
+    for concept, description in job_concepts_dict.items():
+        print(f"\n--- Concept: {concept} ---\n")
+        job_embedding = model.encode([description], show_progress_bar=False)
+        similarities = cosine_similarity(job_embedding, accomplishment_embeddings)[0]
+        top_indices = np.argsort(similarities)[-top_n:][::-1]
+        
+        found_match = False
+        for i, index in enumerate(top_indices):
+            acc = accomplishments[index]
+            score = similarities[index]
+            if score > 0.5: # We can be a bit stricter now
+                print(f"  {i+1}. {acc['title']} (from {acc['source']})")
+                print(f"     Relevance Score: {score:.2f}")
+                print(f"     Evidence: {acc['text']}") # Show the original text
+                print("-" * 50)
+                found_match = True
+        
+        if not found_match:
+            print("  No strong matches found for this concept.")
+
+# --- 4. EXECUTION ---
+skills_data_path = os.path.expanduser('~/Coppermind/roam/career-portfolio/skills')
+employment_data_path = os.path.expanduser('~/Coppermind/roam/career-portfolio/employment')
+
+relevant_job_files = [
+    os.path.join(employment_data_path, 'go_to_market_sales_manager.org'),
+    os.path.join(employment_data_path, 'traditional_lending_subject_matter_expert_sme.org'),
+    os.path.join(employment_data_path, 'commercial_loan_officer.org'),
+    os.path.join(employment_data_path, 'business_relationship_manager.org')
+]
+
+job_concepts = {
+    "Compensation & Financial Planning": "Prepares, updates, and ensures accuracy of variable compensation plans. Computes monthly, quarterly, and annual milestones accurately. Generates compensation statements. Processes compensation through payroll. Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models. Previous compensation plan modeling experience a plus.",
+    "Forecasting & Data Analysis": "Assists in preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts. Working with large amounts of data. Highly analytical and detail oriented.",
+    "BI & Salesforce Reporting": "Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats. Develops ad hoc reports. Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus). MS Access or SQL a definite plus.",
+    "Sales Operations & Process": "Assists in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, and status. 3-5 years sales operations, business strategy and/or financial planning experience required."
+}
+
+# --- Main Logic ---
+print("Loading AI model...")
+model = SentenceTransformer('all-MiniLM-L6-v2')
+print("Model loaded.")
+
+print("\nParsing skills database...")
+skill_dictionary = parse_skills(skills_data_path)
+print(f"Found {len(skill_dictionary)} skills.")
+
+print("\nParsing relevant accomplishments...")
+all_accomplishments = []
+for file_path in relevant_job_files:
+    all_accomplishments.extend(parse_accomplishments_from_file(file_path))
+print(f"Found {len(all_accomplishments)} total accomplishments.")
+
+print("\nEnriching accomplishment data with skill concepts...")
+for acc in all_accomplishments:
+    skill_names = [skill_dictionary.get(skill_id, '') for skill_id in acc["skill_ids"]]
+    # Filter out any empty strings if an ID wasn't found
+    skill_names = [name for name in skill_names if name]
+    conceptual_prefix = ", ".join(skill_names) + ". "
+    acc["enriched_text"] = conceptual_prefix + acc["text"]
+
+# Run the final analysis
+analyze_relevance_by_concept(job_concepts, all_accomplishments, model)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading AI model...
+Model loaded.
+
+Parsing skills database...
+Found 26 skills.
+
+Parsing relevant accomplishments...
+Found 41 total accomplishments.
+
+Enriching accomplishment data with skill concepts...
+
+--- Semantic Relevance Report by Job Concept ---
+
+--- Concept: Compensation & Financial Planning ---
+
+  No strong matches found for this concept.
+
+--- Concept: Forecasting & Data Analysis ---
+
+  No strong matches found for this concept.
+
+--- Concept: BI & Salesforce Reporting ---
+
+  No strong matches found for this concept.
+
+--- Concept: Sales Operations & Process ---
+
+  1. Strategic Sales Coaching (from traditional_lending_subject_matter_expert_sme.org)
+     Relevance Score: 0.50
+     Evidence: Coached reps on how to pivot from a failed traditional loan analysis to a high-margin product sale by translating complex financial rejection reasons into clear, effective sales talk tracks.. Enabled reps to save deals that would have otherwise been lost, preserving revenue and improving sales floor morale.. 
+--------------------------------------------------
+  2. Top Team Performance and Promotion Opportunity (from traditional_lending_subject_matter_expert_sme.org)
+     Relevance Score: 0.50
+     Evidence: Applied data-driven coaching and sales enablement systems to drive the performance of the assigned 15-person sales team.. Led the highest-performing of the six teams in the program, resulting in being one of only two SMEs (out of six) offered a promotion to a full-time Account Executive role upon the program's conclusion.. 
+--------------------------------------------------
+#+end_example
+
+The problem lies in the parse_skills function. Your .org files for skills are structured with the :ID: and :SKILL_NAME: properties in separate drawers. The current script's logic for reading the file line-by-line is too simple to connect them.
+
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+import os
+import re
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# --- 1. NEW ROBUST: SKILL PARSING FUNCTION ---
+def parse_skills(skills_directory):
+    """
+    Parses all .org files in the skills directory to create a map
+    from skill ID to skill name. Reads the whole file to find properties.
+    """
+    skill_map = {}
+    id_regex = re.compile(r':ID:\s*([\w-]+)')
+    name_regex = re.compile(r':SKILL_NAME:\s*(.*)')
+
+    for root, _, files in os.walk(skills_directory):
+        for file in files:
+            if file.endswith(".org") and not file.startswith(".#"):
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    id_match = id_regex.search(content)
+                    name_match = name_regex.search(content)
+                    
+                    if id_match and name_match:
+                        skill_id = id_match.group(1).strip()
+                        skill_name = name_match.group(1).strip()
+                        skill_map[skill_id] = skill_name
+                except Exception as e:
+                    print(f"Error parsing skill file {file_path}: {e}")
+    return skill_map
+
+# --- 2. ACCOMPLISHMENT PARSING FUNCTION ---
+def parse_accomplishments_from_file(file_path):
+    """
+    Parses a single .org file to extract accomplishments,
+    including their associated skill IDs.
+    """
+    accomplishments = []
+    accomplishment_start_regex = re.compile(r'^\*{3}\s+ACCOMPLISHMENT:\s*(.*)')
+    star_regex = re.compile(r'^\s*:(SITUATION|TASK|ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+    skills_regex = re.compile(r'^\s*:SKILLS:\s*(.*)', re.IGNORECASE)
+    skill_id_regex = re.compile(r'\[\[id:([\w-]+)\]\]')
+
+    if not os.path.isfile(file_path):
+        print(f"Warning: File not found, skipping: {file_path}")
+        return accomplishments
+
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.readlines()
+
+    current_accomplishment = None
+    for line in content:
+        match_start = accomplishment_start_regex.match(line)
+        if match_start:
+            if current_accomplishment and current_accomplishment.get("text"):
+                accomplishments.append(current_accomplishment)
+            current_accomplishment = {
+                "title": match_start.group(1).strip(),
+                "text": "",
+                "skill_ids": [],
+                "source": os.path.basename(file_path)
+            }
+            continue
+
+        if current_accomplishment is not None:
+            skills_match = skills_regex.match(line)
+            if skills_match:
+                skill_line = skills_match.group(1)
+                ids = skill_id_regex.findall(skill_line)
+                current_accomplishment["skill_ids"].extend(ids)
+
+            match_star = star_regex.match(line)
+            if match_star:
+                star_part = match_star.group(1).upper()
+                star_text = match_star.group(2).strip() + ". "
+                if star_part in ["ACTION", "RESULT"]:
+                    current_accomplishment["text"] += star_text
+    
+    if current_accomplishment and current_accomplishment.get("text"):
+        accomplishments.append(current_accomplishment)
+        
+    return accomplishments
+
+# --- 3. THE MAIN ANALYSIS SCRIPT ---
+def analyze_relevance_by_concept(job_concepts_dict, accomplishments, model, top_n=3):
+    if not accomplishments:
+        print("No accomplishments found to analyze.")
+        return
+
+    # Use the 'enriched_text' for the analysis
+    accomplishment_texts = [acc["enriched_text"] for acc in accomplishments]
+    accomplishment_embeddings = model.encode(accomplishment_texts, show_progress_bar=True)
+
+    print("\n--- Semantic Relevance Report by Job Concept ---")
+    for concept, description in job_concepts_dict.items():
+        print(f"\n--- Concept: {concept} ---\n")
+        job_embedding = model.encode([description], show_progress_bar=False)
+        similarities = cosine_similarity(job_embedding, accomplishment_embeddings)[0]
+        top_indices = np.argsort(similarities)[-top_n:][::-1]
+        
+        found_match = False
+        for i, index in enumerate(top_indices):
+            acc = accomplishments[index]
+            score = similarities[index]
+            if score > 0.5: 
+                print(f"  {i+1}. {acc['title']} (from {acc['source']})")
+                print(f"     Relevance Score: {score:.2f}")
+                print(f"     Evidence: {acc['text']}")
+                print("-" * 50)
+                found_match = True
+        
+        if not found_match:
+            print("  No strong matches found for this concept.")
+
+# --- 4. EXECUTION ---
+skills_data_path = os.path.expanduser('~/Coppermind/roam/career-portfolio/skills')
+employment_data_path = os.path.expanduser('~/Coppermind/roam/career-portfolio/employment')
+
+relevant_job_files = [
+    os.path.join(employment_data_path, 'go_to_market_sales_manager.org'),
+    os.path.join(employment_data_path, 'traditional_lending_subject_matter_expert_sme.org'),
+    os.path.join(employment_data_path, 'commercial_loan_officer.org'),
+    os.path.join(employment_data_path, 'business_relationship_manager.org')
+]
+
+job_concepts = {
+    "Compensation & Financial Planning": "Prepares, updates, and ensures accuracy of variable compensation plans. Computes monthly, quarterly, and annual milestones accurately. Generates compensation statements. Processes compensation through payroll. Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models. Previous compensation plan modeling experience a plus.",
+    "Forecasting & Data Analysis": "Assists in preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts. Working with large amounts of data. Highly analytical and detail oriented.",
+    "BI & Salesforce Reporting": "Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats. Develops ad hoc reports. Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus). MS Access or SQL a definite plus.",
+    "Sales Operations & Process": "Assists in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, and status. 3-5 years sales operations, business strategy and/or financial planning experience required."
+}
+
+# --- Main Logic ---
+print("Loading AI model...")
+model = SentenceTransformer('all-MiniLM-L6-v2')
+print("Model loaded.")
+
+print("\nParsing skills database...")
+skill_dictionary = parse_skills(skills_data_path)
+print(f"Found {len(skill_dictionary)} skills.")
+
+print("\nParsing relevant accomplishments...")
+all_accomplishments = []
+for file_path in relevant_job_files:
+    all_accomplishments.extend(parse_accomplishments_from_file(file_path))
+print(f"Found {len(all_accomplishments)} total accomplishments.")
+
+print("\nEnriching accomplishment data with skill concepts...")
+for acc in all_accomplishments:
+    skill_names = [skill_dictionary.get(skill_id, '') for skill_id in acc["skill_ids"]]
+    skill_names = [name for name in skill_names if name]
+    conceptual_prefix = ", ".join(skill_names) + ". "
+    acc["enriched_text"] = conceptual_prefix + acc["text"]
+
+# Run the final analysis
+analyze_relevance_by_concept(job_concepts, all_accomplishments, model)
+
+#+end_src
+
+#+RESULTS:
+#+begin_example
+Loading AI model...
+Model loaded.
+
+Parsing skills database...
+Found 26 skills.
+
+Parsing relevant accomplishments...
+Found 41 total accomplishments.
+
+Enriching accomplishment data with skill concepts...
+
+--- Semantic Relevance Report by Job Concept ---
+
+--- Concept: Compensation & Financial Planning ---
+
+  No strong matches found for this concept.
+
+--- Concept: Forecasting & Data Analysis ---
+
+  No strong matches found for this concept.
+
+--- Concept: BI & Salesforce Reporting ---
+
+  No strong matches found for this concept.
+
+--- Concept: Sales Operations & Process ---
+
+  1. Strategic Sales Coaching (from traditional_lending_subject_matter_expert_sme.org)
+     Relevance Score: 0.50
+     Evidence: Coached reps on how to pivot from a failed traditional loan analysis to a high-margin product sale by translating complex financial rejection reasons into clear, effective sales talk tracks.. Enabled reps to save deals that would have otherwise been lost, preserving revenue and improving sales floor morale.. 
+--------------------------------------------------
+  2. Top Team Performance and Promotion Opportunity (from traditional_lending_subject_matter_expert_sme.org)
+     Relevance Score: 0.50
+     Evidence: Applied data-driven coaching and sales enablement systems to drive the performance of the assigned 15-person sales team.. Led the highest-performing of the six teams in the program, resulting in being one of only two SMEs (out of six) offered a promotion to a full-time Account Executive role upon the program's conclusion.. 
+--------------------------------------------------
+#+end_example
+
+
+#+begin_src python :python ~/projects/career-portfolio/.venv/bin/python :results output
+import os
+import re
+import torch
+from sentence_transformers import SentenceTransformer
+from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
+
+# --- 1. SKILL PARSING FUNCTION (Robust) ---
+def parse_skills(skills_directory):
+    """
+    Parses all .org files in the skills directory to create a map
+    from skill ID to skill name.
+    """
+    skill_map = {}
+    id_regex = re.compile(r':ID:\s*([\w-]+)')
+    name_regex = re.compile(r':SKILL_NAME:\s*(.*)')
+
+    for root, _, files in os.walk(skills_directory):
+        for file in files:
+            if file.endswith(".org") and not file.startswith(".#"):
+                file_path = os.path.join(root, file)
+                try:
+                    with open(file_path, 'r', encoding='utf-8') as f:
+                        content = f.read()
+                    
+                    id_match = id_regex.search(content)
+                    name_match = name_regex.search(content)
+                    
+                    if id_match and name_match:
+                        skill_id = id_match.group(1).strip()
+                        skill_name = name_match.group(1).strip()
+                        skill_map[skill_id] = skill_name
+                except Exception as e:
+                    print(f"Error parsing skill file {file_path}: {e}")
+    return skill_map
+
+# --- 2. ACCOMPLISHMENT PARSING FUNCTION (Corrected Regex) ---
+def parse_accomplishments_from_file(file_path):
+    """
+    Parses a single .org file to extract accomplishments,
+    including their associated skill IDs from within a PROPERTIES drawer.
+    """
+    accomplishments = []
+    # Regex to find the start of a multi-line accomplishment block
+    accomplishment_block_regex = re.compile(r'(\*{3}\s+ACCOMPLISHMENT:.*?)(?=\n\*{3}|\Z)', re.DOTALL)
+    # Regex to extract details from within a block
+    title_regex = re.compile(r'ACCOMPLISHMENT:\s*(.*)')
+    skills_regex = re.compile(r':SKILLS:\s*(.*)', re.IGNORECASE)
+    skill_id_regex = re.compile(r'\[\[id:([\w-]+)\]\]')
+    star_regex = re.compile(r':(ACTION|RESULT):\s*(.*)', re.IGNORECASE)
+
+    if not os.path.isfile(file_path):
+        print(f"Warning: File not found, skipping: {file_path}")
+        return accomplishments
+
+    with open(file_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+
+    blocks = accomplishment_block_regex.findall(content)
+
+    for block in blocks:
+        title_match = title_regex.search(block)
+        title = title_match.group(1).strip() if title_match else "Untitled"
+        
+        skills_line_match = skills_regex.search(block)
+        skill_ids = []
+        if skills_line_match:
+            skill_ids = skill_id_regex.findall(skills_line_match.group(1))
+
+        star_matches = star_regex.findall(block)
+        text = " ".join([match[1].strip() + "." for match in star_matches])
+
+        if text:
+            accomplishments.append({
+                "title": title,
+                "text": text,
+                "skill_ids": skill_ids,
+                "source": os.path.basename(file_path)
+            })
+            
+    return accomplishments
+
+# --- 3. THE MAIN ANALYSIS SCRIPT ---
+def analyze_relevance_by_concept(job_concepts_dict, accomplishments, model, top_n=3, threshold=0.5):
+    """
+    Analyzes job concepts against accomplishments and prints a report.
+    """
+    if not accomplishments:
+        print("No accomplishments found to analyze.")
+        return
+
+    accomplishment_texts = [acc["enriched_text"] for acc in accomplishments]
+    accomplishment_embeddings = model.encode(accomplishment_texts, show_progress_bar=True, device='cuda')
+
+    print("\n--- Semantic Relevance Report by Job Concept ---")
+    for concept, description in job_concepts_dict.items():
+        print(f"\n--- Concept: {concept} ---\n")
+        job_embedding = model.encode([description], show_progress_bar=False, device='cuda')
+        similarities = cosine_similarity(job_embedding, accomplishment_embeddings)[0]
+        top_indices = np.argsort(similarities)[-top_n:][::-1]
+        
+        found_match = False
+        for i, index in enumerate(top_indices):
+            acc = accomplishments[index]
+            score = similarities[index]
+            if score > threshold:
+                print(f"  {i+1}. {acc['title']} (from {acc['source']})")
+                print(f"     Relevance Score: {score:.2f}")
+                # For clarity, show the original text without the enrichment prefix
+                print(f"     Evidence: {acc['text']}")
+                print("-" * 50)
+                found_match = True
+        
+        if not found_match:
+            print("  No strong matches found for this concept.")
+
+# --- 4. EXECUTION ---
+# Define paths using your portfolio's root directory structure
+base_path = os.path.expanduser('~/projects/career-portfolio/')
+skills_data_path = os.path.join(base_path, 'data/skills')
+employment_data_path = os.path.join(base_path, 'data/employment')
+
+# Focus on your most relevant, recent roles for the analysis
+relevant_job_files = [
+    os.path.join(employment_data_path, 'go_to_market_sales_manager.org'),
+    os.path.join(employment_data_path, 'traditional_lending_subject_matter_expert_sme.org'),
+    os.path.join(employment_data_path, 'commercial_loan_officer.org'),
+    os.path.join(employment_data_path, 'business_relationship_manager.org'),
+    os.path.join(employment_data_path, 'operations_intern.org') # Added for broader skills
+]
+
+# The job concepts from the sample job description you provided
+job_concepts = {
+    "Compensation & Financial Planning": "Prepares, updates, and ensures accuracy of variable compensation plans. Computes monthly, quarterly, and annual milestones accurately. Generates compensation statements. Processes compensation through payroll. Provides analytical support for creating and calculating sales compensation and operating plans. Prepares scenario analysis for various comp models. Previous compensation plan modeling experience a plus.",
+    "Forecasting & Data Analysis": "Assists in preparation of global forecasts with analysis of global sales trends. Analyzes product trends, coordinates with Supply Chain on demand forecasts. Working with large amounts of data. Highly analytical and detail oriented.",
+    "BI & Salesforce Reporting": "Develops sales, financial, and management reports in SFDC, Tableau, and other BI analytical reporting formats. Develops ad hoc reports. Strong technical skills including various ERP systems, JDE, Salesforce.com administration, Business Central, Tableau and QlikView development, Microsoft Office Excel (Macros and Power Query are a plus). MS Access or SQL a definite plus.",
+    "Sales Operations & Process": "Assists in the on-boarding and off-boarding of Independent Sales Reps. Maintains Independent Sales Reps compliance, account changes, and status. 3-5 years sales operations, business strategy and/or financial planning experience required."
+}
+
+# --- Main Logic ---
+print("--- Initializing Analysis ---")
+print(f"PyTorch version: {torch.__version__}")
+print(f"CUDA available: {torch.cuda.is_available()}")
+
+print("\nLoading AI model...")
+# Using a powerful model that understands concepts well
+model = SentenceTransformer('all-mpnet-base-v2', device='cuda')
+print("Model loaded.")
+
+print("\n1. Parsing skills database...")
+skill_dictionary = parse_skills(skills_data_path)
+print(f"Found {len(skill_dictionary)} skills.")
+
+print("\n2. Parsing relevant accomplishments...")
+all_accomplishments = []
+for file_path in relevant_job_files:
+    if os.path.exists(file_path):
+        all_accomplishments.extend(parse_accomplishments_from_file(file_path))
+    else:
+        print(f"Warning: Could not find file {file_path}")
+print(f"Found {len(all_accomplishments)} total accomplishments from relevant roles.")
+
+print("\n3. Enriching accomplishment data with skill concepts...")
+for acc in all_accomplishments:
+    skill_names = [skill_dictionary.get(skill_id, '') for skill_id in acc["skill_ids"]]
+    skill_names = [name for name in skill_names if name]
+    conceptual_prefix = ", ".join(skill_names) + ". " if skill_names else ""
+    acc["enriched_text"] = conceptual_prefix + acc["text"]
+
+print("Enrichment complete. Starting analysis...")
+# Run the final analysis
+analyze_relevance_by_concept(job_concepts, all_accomplishments, model)
+#+end_src
+
+#+RESULTS:
+#+begin_example
+--- Initializing Analysis ---
+PyTorch version: 2.7.1+cu128
+CUDA available: True
+
+Loading AI model...
+Model loaded.
+
+1. Parsing skills database...
+Found 26 skills.
+
+2. Parsing relevant accomplishments...
+Found 46 total accomplishments from relevant roles.
+
+3. Enriching accomplishment data with skill concepts...
+Enrichment complete. Starting analysis...
+
+--- Semantic Relevance Report by Job Concept ---
+
+--- Concept: Compensation & Financial Planning ---
+
+  1. Financial Modeling and Collaboration (from go_to_market_sales_manager.org)
+     Relevance Score: 0.55
+     Evidence: Worked closely with the Business Intelligence and Operations teams, providing key inputs and assumptions to build the division's financial model and forecast its profitability.. Contributed to the creation of a sound financial model that was used to manage the division and report on its performance..
+--------------------------------------------------
+
+--- Concept: Forecasting & Data Analysis ---
+
+  1. Financial Modeling and Collaboration (from go_to_market_sales_manager.org)
+     Relevance Score: 0.58
+     Evidence: Worked closely with the Business Intelligence and Operations teams, providing key inputs and assumptions to build the division's financial model and forecast its profitability.. Contributed to the creation of a sound financial model that was used to manage the division and report on its performance..
+--------------------------------------------------
+  2. Lead Flow Management (from go_to_market_sales_manager.org)
+     Relevance Score: 0.51
+     Evidence: Managed the technical process of lead flow and distribution within Salesforce, ensuring the "Speed to Lead" round-robin system was functioning correctly.. Ensured equitable and timely lead follow-up from the sales team, maximizing the opportunity of every inbound lead..
+--------------------------------------------------
+
+--- Concept: BI & Salesforce Reporting ---
+
+  No strong matches found for this concept.
+
+--- Concept: Sales Operations & Process ---
+
+  1. Autonomous Performance (from commercial_loan_officer.org)
+     Relevance Score: 0.60
+     Evidence: Independently performed all duties from the prior SME role, including conducting deep-dive cash flow analyses, structuring creative financing solutions, and ensuring compliance with SBA SOP 50 10.. Demonstrated the ability to operate with full autonomy at a subject-matter expert level within a full-cycle sales role..
+--------------------------------------------------
+  2. Channel Partner Development (from business_relationship_manager.org)
+     Relevance Score: 0.55
+     Evidence: Successfully onboarded two new Independent Sales Organizations (ISOs) and trained their brokers on our specific credit box and product-market fit.. Generated additional funding opportunities by successfully developing and enabling new channel partners..
+--------------------------------------------------
+  3. High-Volume Loan Origination (from commercial_loan_officer.org)
+     Relevance Score: 0.55
+     Evidence: Applied a highly consultative sales approach to diagnose business needs, conduct ROI analyses, and match clients with the best financing solutions from a network of over 75 lenders.. Successfully originated over $5MM in total loan volume during my tenure in the role..
+--------------------------------------------------
+#+end_example
